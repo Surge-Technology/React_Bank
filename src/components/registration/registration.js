@@ -6,31 +6,26 @@ import { toast } from "react-toastify";
 import { API_BASE_URL } from "../../service/service";
 
 function Registration(props) {
-  // State to store user details
   const [userDetails, setUserDetails] = useState({
     customerName: "",
     email: "",
     gender: "",
     mobile: "",
     password: "",
-    address: "", // Add a state to store the address for address verification
+    address: "",
   });
 
-  // State to handle OTP input and verification
+  const [isOtpSent, setIsOtpSent] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
-  const [otp, setOtp] = useState("");
 
-  // Function to display global toast messages
   function globalToast(message) {
     return toast.error(message);
   }
 
-  // Function to display success toast messages
   function successToast() {
     toast.success("OTP Verified! Account Created Successfully");
   }
 
-  // Event handler for user details input fields
   function onChangeCustomerHandler(event) {
     const updatedUserDetails = {
       ...userDetails,
@@ -39,55 +34,30 @@ function Registration(props) {
     setUserDetails(updatedUserDetails);
   }
 
-  // Event handler for OTP input field
-  function onChangeOtpHandler(event) {
-    setOtp(event.target.value);
-  }
-
-  // Function to handle form submission
   function formSubmitHandler() {
-    if (!isOtpVerified) {
+    if (!isOtpSent) {
+      // Send OTP to the user's email (Add your code to send OTP via email here)
+      // Assuming the OTP has been successfully sent, update the state
+      setIsOtpSent(true);
+      globalToast("OTP has been sent to your email.");
+    } else if (!isOtpVerified) {
       // Show the OTP verification popup
       const enteredOtp = prompt("Enter OTP:");
-      if (enteredOtp === "123456") {
+      if (enteredOtp === "123456") { // Replace "123456" with your actual OTP verification logic (either from backend or other methods)
         setIsOtpVerified(true);
         successToast();
+        // Redirect to address verification page after OTP is verified
+        props.history.push("address-verification");
       } else {
         globalToast("Invalid OTP");
       }
     } else {
-      // Perform form submission when OTP is verified
-      if (userDetails.userName === "") {
-        globalToast("Empty username");
-      } else if (!userDetails.customerName.match("[A-Z][a-z]*([ ][A-Z][a-z]*)*")) {
-        globalToast("Invalid Name");
-      } else if (!userDetails.email.match("[^@]+@[^.]+..+")) {
-        globalToast("Invalid Email");
-      } else if (userDetails.mobile.length !== 10 || !userDetails.mobile.match("[0-9]{10}")) {
-        globalToast("Invalid mobile number, 10 digits required");
-      } else {
-        axios
-          .post(API_BASE_URL + "startWorkflow", userDetails)
-          .then((res) => {
-            console.log(res);
-            successToast();
-            props.history.push("address-verification"); // Redirect to address verification page
-          })
-          .catch((error) => {
-            if (error.response && error.response.data) {
-              console.log(error.response.data);
-              globalToast("User Already Exists");
-            } else {
-              console.log("Error:", error);
-              globalToast("Error occurred while submitting the form");
-            }
-          });
-      }
+      // Perform form submission when OTP is already verified (optional)
+      // ... Add your code here if needed ...
     }
   }
 
   return (
-    // JSX code for the registration form
     <div className="container-fluid">
       <div className="card bg-light bg">
         <article className="card-body mx-auto" style={{ width: "40%" }}>
@@ -211,33 +181,48 @@ function Registration(props) {
               />
             </div>
 
-            {!isOtpVerified && (
-              <div className="form-group input-group">
-                <div className="input-group-prepend">
-                  <span className="input-group-text">
-                    <i className="fa fa-lock iconsize"></i>
-                  </span>
-                </div>
-                <input
-                  name="otp"
-                  className="form-control"
-                  placeholder="Enter OTP"
-                  type="text"
-                  value={otp}
-                  onChange={onChangeOtpHandler}
-                />
+            {!isOtpSent && (
+              <div className="form-group">
+                <button
+                  type="button"
+                  onClick={formSubmitHandler}
+                  className="btn btn-primary btn-block"
+                >
+                  Submit
+                </button>
               </div>
             )}
 
-            <div className="form-group">
-              <button
-                type="button"
-                onClick={formSubmitHandler}
-                className="btn btn-primary btn-block"
-              >
-                {!isOtpVerified ? "Submit" : "Create Account"}
-              </button>
-            </div>
+            {isOtpSent && !isOtpVerified && (
+              <div>
+                <p>OTP has been sent to your email.</p>
+                <div className="form-group">
+                  <button
+                    type="button"
+                    onClick={formSubmitHandler}
+                    className="btn btn-primary btn-block"
+                  >
+                    Verify OTP
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {isOtpVerified && (
+              <div className="form-group">
+                <button
+                  type="button"
+                  onClick={() => {
+                    successToast();
+                    // Redirect to address verification page after OTP is verified
+                    props.history.push("address-verification");
+                  }}
+                  className="btn btn-primary btn-block"
+                >
+                  Create Account
+                </button>
+              </div>
+            )}
 
             <p className="text-center" style={{ color: "white", fontSize: "23px" }}>
               Have an account? <Link to="login">Login</Link>
