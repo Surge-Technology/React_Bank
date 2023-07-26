@@ -1,15 +1,46 @@
-body {
-  background:#ededed;
+.address-form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #0a0909;
+  border-radius: 15px;
+  background-color: #f9f9f9;
+  height: 100vh;
+  display: flex;
+  font-size: medium;
 }
-.panel {
-  display:block;
-  height:278px;
+.form-wrapper {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
 }
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.form-control {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  margin-bottom: 0;
+  height: 50px;
+  border: 1px solid black;
+    border-radius: 0.25rem;
+}
+.Addform{
+  /* background-color: #e6e5e5; */
+  height: 200vh;
 
-.freeBird {
-  margin-top:-100px;
+  background-image: url("../../assets/images/header-background.jpg");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  box-shadow: 5px 8px 7px rgb(0, 0, 0);
 }
-
-.small-text {
-  font-size:12px;
+label {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 25px;
 }

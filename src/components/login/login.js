@@ -41,6 +41,8 @@ export default function Login(props) {
 
       // Show the OTP verification popup
       setShowOTPModal(true);
+      props.history.push("AddressFillForm");
+
     }
   }
 
