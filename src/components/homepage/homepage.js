@@ -62,7 +62,7 @@ function HomePage() {
               <div className="pad">
                 <h4 className="text-light">Our History</h4>
                 <p className="text-muted">
-                  Setup in 2004, we continue to serve our services to our happy
+                  Setup in 2023, we continue to serve our services to our happy
                   and satisfied customers
                 </p>
 
