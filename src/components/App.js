@@ -7,6 +7,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CardDetails from "./card/CardDetails";
+import CustomerQueryPage from "./CustomerQueryPage/CustomerQueryPage";
+import AdminLogin from "./AdminLogin/adminlogin";
 
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
         <Route path="/registration" component={Registration} />
         <Route path="/login" component={Login} />
         <Route path="/cardDetails" component={CardDetails} />
+        <Route path="/customerQueryPage" component={CustomerQueryPage} />
+        <Route path="/adminLogin" component={AdminLogin} />
         <Route path="*" component={() => "404 Not found"} />
       </Switch>
     </Router>
