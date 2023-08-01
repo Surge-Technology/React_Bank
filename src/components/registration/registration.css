@@ -21,7 +21,7 @@
 }
 
 .bg {
-  background-image: url("../../assets/images/signup.png");
+  background-image: url("../../assets/images/feature-background.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   box-shadow: 5px 8px 7px rgb(0, 0, 0);
@@ -36,4 +36,8 @@ select {
 
 .iconsize {
   font-size: 16px;
+}
+
+.custom-select{
+  height:"50px"
 }

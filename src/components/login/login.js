@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import Header from "../header/header";
 
-export default function Login(props) {
-  const initialLoginState = {
-    email: "",
-    password: "",
-    error: "",
-  };
+const initialLoginState = {
+  email: "",
+  password: "",
+  error: "",
+};
 
+export default function Login(props) {
   const [login, setLogin] = useState(initialLoginState);
-  const [redirectToCardDetails, setRedirectToCardDetails] = useState(false);
 
   function onChangeLoginHandler(event) {
     const updatedLogin = {
       ...login,
-      [event.target.name]: event.target.value.trim(),
+      [event.target.name]: event.target.value,
     };
     setLogin(updatedLogin);
   }
@@ -26,13 +26,27 @@ export default function Login(props) {
     } else if (!login.password) {
       setLogin({ ...login, error: "Please enter password" });
     } else {
-      const registeredEmail = "user@example.com";
-      const registeredPassword = "password123";
+      const registeredUserDetails = JSON.parse(localStorage.getItem("registeredUser"));
+      if (registeredUserDetails) {
+        if (login.email === registeredUserDetails.email && login.password === registeredUserDetails.password) {
+          // Display a success toast notification for successful login
+          toast.success("Login successful!", {
+            position: toast.POSITION.TOP_LEFT,
+          });
 
-      if (login.email === registeredEmail && login.password === registeredPassword) {
-        setRedirectToCardDetails(true);
+          // Redirect to the AddressFillForm component after successful login
+          props.history.push("/addressfillform");
+        } else {
+          // Display an error toast notification for invalid credentials
+          toast.error("Invalid email or password. Please try again.", {
+            position: toast.POSITION.TOP_LEFT,
+          });
+        }
       } else {
-        setLogin({ ...login, error: "Invalid email or password. Please try again." });
+        // Display an error toast notification if no registered user is found
+        toast.error("No registered user found. Please register first.", {
+          position: toast.POSITION.TOP_LEFT,
+        });
       }
     }
   }
@@ -83,11 +97,7 @@ export default function Login(props) {
                 />
               </div>
 
-              <button
-                type="button"
-                className="btn btn-primary btn-block"
-                onClick={handleLogin}
-              >
+              <button type="button" className="btn btn-primary btn-block" onClick={handleLogin}>
                 Login
               </button>
 
@@ -96,7 +106,6 @@ export default function Login(props) {
               </div>
 
               <strong>
-                {" "}
                 <p className="text-center" style={{ fontSize: "20px" }}>
                   <small>New User?</small>
                   <Link to="/registration">
@@ -110,8 +119,6 @@ export default function Login(props) {
         <br />
         <br />
       </div>
-
-      {redirectToCardDetails && <Redirect to="/Carddetails" />}
     </div>
   );
 }

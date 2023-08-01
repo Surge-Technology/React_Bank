@@ -1,175 +1,97 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
-// import "./AddressFillForm.css";
+import React, { useState } from 'react';
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import './AddressFilingForm.css'; // Import custom CSS for styling
 
+const AddressFillForm = (props) => {
+  const [address, setAddress] = useState('');
+  const [landmark, setLandmark] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [showError, setShowError] = useState(false);
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Perform form validation before submission
+    const textOnly = /^[A-Za-z ]+$/;
 
-
-
-const AddressFillForm = () => {
-  const [file, setFile] = useState(null);
-  const [address, setAddress] = useState({
-    street: "",
-    suburb: "",
-    state: "",
-    postcode: ""
-  });
-
-  // Step 1: Add state to manage OTP information
-  const [otp, setOTP] = useState("");
-  const [isOTPGenerated, setIsOTPGenerated] = useState(false);
-  const [isOTPVerified, setIsOTPVerified] = useState(false);
-
-  // Function to handle file upload
-  const handleFileUpload = (event) => {
-    const uploadedFile = event.target.files[0];
-    setFile(uploadedFile);
-  };
-
-  // Step 2: Function to generate and send OTP
-  const generateAndSendOTP = () => {
-    // Replace this fictional method with actual implementation for sending OTP
-    axios
-      .post("https://api.example.com/send-otp", { phone: "USER_PHONE_NUMBER" })
-      .then(() => {
-        setIsOTPGenerated(true);
-        toast.success("OTP sent successfully!");
-      })
-      .catch((error) => {
-        console.error("Error sending OTP:", error);
-        toast.error("Error sending OTP. Please try again.");
-      });
-  };
-
-  // Step 3: Function to verify OTP
-  const verifyOTP = () => {
-    // Replace this fictional method with actual implementation for verifying OTP
-    axios
-      .post("https://api.example.com/verify-otp", { otp })
-      .then(() => {
-        setIsOTPVerified(true);
-        toast.success("OTP verified successfully!");
-      })
-      .catch((error) => {
-        console.error("Error verifying OTP:", error);
-        toast.error("Invalid OTP. Please try again.");
-      });
-  };
-
-  // Step 4: Function to navigate to the address page after successful verification
-  const navigateToAddressPage = () => {
-    // Replace this with your navigation code to the address page
-    // For example, you can use React Router to achieve navigation
-    // Here, we are just displaying an alert as a placeholder.
-    alert("Address page navigation placeholder");
-  };
-
-  // Function to automatically fill address after file upload
-  const autoFillAddress = () => {
-    if (!file) {
-      toast.error("Please upload a file first.");
-      return;
+    if (address.trim() === '' || !textOnly.test(landmark) || !textOnly.test(city) || !textOnly.test(state)) {
+      setShowError(true);
+    } else {
+      setShowError(false);
+      // Handle form submission here
+      // You can access the form data using the state variables (address, landmark, city, state)
+      console.log('Form data:', { address, landmark, city, state });
+      props.history.push('PersonalDetails');
     }
-
-    if (!isOTPGenerated) {
-      generateAndSendOTP();
-      return;
-    }
-
-    if (!isOTPVerified) {
-      toast.error("Please verify OTP before filling the address.");
-      return;
-    }
-
-    // Replace this fictional method with actual implementation using external services
-    axios
-      .get("https://api.example.com/fill-address", { params: { file: file } })
-      .then((response) => {
-        const { street, suburb, state, postcode } = response.data;
-        setAddress({ street, suburb, state, postcode });
-        toast.success("Address filled successfully!");
-        navigateToAddressPage(); // Step 4: Navigate to the address page after successful address fill
-      })
-      .catch((error) => {
-        console.error("Error filling address:", error);
-        toast.error("Error filling address. Please try again.");
-      });
   };
 
   return (
-    <div>
-      <h2>Address Fill Form</h2>
-      <form>
-        <div className="form-group">
-          <label htmlFor="fileUpload">Upload Document:</label>
-          <input
-            type="file"
-            id="fileUpload"
-            onChange={handleFileUpload}
-            accept=".pdf,.doc,.docx"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="street">Street:</label>
-          <input
-            type="text"
-            id="street"
-            value={address.street}
-            onChange={(e) => setAddress({ ...address, street: e.target.value })}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="suburb">Suburb:</label>
-          <input
-            type="text"
-            id="suburb"
-            value={address.suburb}
-            onChange={(e) => setAddress({ ...address, suburb: e.target.value })}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="state">State:</label>
-          <input
-            type="text"
-            id="state"
-            value={address.state}
-            onChange={(e) => setAddress({ ...address, state: e.target.value })}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="postcode">Postcode:</label>
-          <input
-            type="text"
-            id="postcode"
-            value={address.postcode}
-            onChange={(e) => setAddress({ ...address, postcode: e.target.value })}
-          />
-        </div>
-
-        {isOTPGenerated && !isOTPVerified && (
-          <div className="form-group">
-            <label htmlFor="otp">Enter OTP:</label>
-            <input
-              type="text"
-              id="otp"
-              value={otp}
-              onChange={(e) => setOTP(e.target.value)}
+    <div className='Addform'>
+      <br />
+      <br />
+      <div className='container'>
+        <br />
+        <h2>Enter Address Details</h2>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group controlId='address'>
+            <Form.Label>Address</Form.Label>
+            <Form.Control
+              type='text'
+              placeholder='Enter Address'
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              required
             />
-            <button type="button" onClick={verifyOTP}>
-              Verify OTP
-            </button>
-          </div>
-        )}
+          </Form.Group>
 
-        <button type="button" onClick={autoFillAddress}>
-          Auto Fill Address
-        </button>
-      </form>
+          <Form.Group controlId='landmark'>
+            <Form.Label>Landmark</Form.Label>
+            <Form.Control
+              type='text'
+              placeholder='Enter Landmark'
+              value={landmark}
+              onChange={(e) => setLandmark(e.target.value)}
+            />
+          </Form.Group>
+
+          <Row>
+            <Form.Group as={Col} controlId='city'>
+              <Form.Label>City</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter City'
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId='state'>
+              <Form.Label>State</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter State'
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                required
+              />
+            </Form.Group>
+          </Row>
+
+          {showError && (
+            <Alert variant='danger'>
+              Please fill  the fields.
+            </Alert>
+          )}
+
+          <br />
+          <center>
+            <Button variant='primary' type='submit' style={{ height: '50px' }}>
+              Submit
+            </Button>
+          </center>
+        </Form>
+      </div>
     </div>
   );
 };
