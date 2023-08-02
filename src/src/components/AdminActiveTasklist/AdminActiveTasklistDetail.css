@@ -1,0 +1,13 @@
+.adminactivetaskform {
+  /* background-color: #e6e5e5; */
+
+  height: 50vh;
+
+  background-image: url("../../assets/images/header-background.jpg");
+
+  background-repeat: no-repeat;
+
+  background-size: 100%;
+
+  box-shadow: 5px 8px 7px rgb(0, 0, 0);
+}
