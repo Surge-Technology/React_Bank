@@ -78,7 +78,7 @@ Please note that this decision has been made after a thorough analyses, and we a
                       </tr>
                       <tr>
                         <td bgcolor="#ffffff" align="left" style={{ padding: '0px 30px 40px 30px', borderRadius: '0px 0px 4px 4px', color: '#666666', fontFamily: 'Lato, Helvetica, Arial, sans-serif', fontSize: '18px', fontWeight: 400, lineHeight: '25px' }}>
-                          <p style={{ margin: '0' }}>Cheers,<br />Yes Bank</p>
+                          <p style={{ margin: '0' }}>Cheers,<br />RBA Bank</p>
                         </td>
                       </tr>
                     </table>

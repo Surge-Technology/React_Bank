@@ -1,0 +1,33 @@
+/* .col-lg-5{
+    padding-right: 0px;
+    padding-left: 50px;
+} */
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: auto;
+    margin-left: 50px;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+
+  .col-md-12 {
+    flex: 0 0 100%;
+    max-width: 85%;
+    margin-left: 11%;
+}
+
+.btn {
+    color: #fff;
+    background-color:  #07b90f;
+    border-color: #0CDA90;
+    /* box-shadow: 0 3px 2px rgb(12 218 144 / 20%); */
+}
+.list-group-item.active {
+    z-index: 2;
+    color: #fff;
+    background-color: #84f376;
+    border-color: #007bff;
+}

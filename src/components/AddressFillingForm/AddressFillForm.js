@@ -2,65 +2,61 @@ import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import './AddressFilingForm.css'; // Import custom CSS for styling
 import axios from 'axios';
+
 const AddressFillForm = (props) => {
   const [addressData, setAddressData] = useState({
     address: '',
+  
   });
-  const [isAddressValid, setIsAddressValid] = useState(true);
-  const [showError, setShowError] = useState(false);
+  const [responseMessage, setResponseMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Perform form validation before submission
-    const textOnly = /^[A-Za-z ]+$/;
 
-    if (
-      addressData.address.trim() === '' ||
-      !textOnly.test(addressData.landmark) ||
-      !textOnly.test(addressData.city) ||
-      !textOnly.test(addressData.state)
-    ) {
-      setShowError(true);
-      setIsAddressValid(false);
-    } else {
-      setShowError(false);
 
-      try {
-        // Send the addressData to the backend API
-        // const processInstanceKey=sessionStorage.getItem("processInstanceKey");
-        // console.log(processInstanceKey);
-        let data=sessionStorage.getItem("key");
-        console.log("data",data);
-        const response = await axios.post('http://localhost:8080/completeTaskAddressForm/${data}', addressData);
+    try {
+      // Step 1: Get the processInstanceKey from sessionStorage or from the API
+      let processInstanceKey = sessionStorage.getItem("key");
 
-        // Assuming the backend API returns a JSON object with a "valid" property
-        if (response.data.valid) {
-          // If the address is valid, navigate to the next page
-        // const p   sessionStorage.setItem('addressValidated', 'proces');
-          // Perform navigation to the next page here (e.g., using React Router)
-        } else {
-          // If the address is not valid, show an error message
-          setShowError(true);
-          setIsAddressValid(false);
-        }
-      } catch (error) {
-        // Handle any error that might occur during the API request
-        console.error('Error while making the API request:', error);
+      console.log("dataaaa", processInstanceKey);
+      if (!processInstanceKey) {
+
+        throw new Error('Process instance key not found.');
       }
+      const response = await axios.post(
+        `http://localhost:8080/completeTaskWithInstanceId/${processInstanceKey}`,
+        addressData
+      );
+        alert("your Address is valid")
+      setResponseMessage(response.data.message);
+    }
+    catch (error) {
+      console.error('Error while making the API request:', error);
+      setErrorMessage('An error occurred while processing your request. Please try again later.');
+    }
+    props.history.push("personalDetails");
+
+  };
+
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setAddressData((prevAddressData) => ({
+  //     ...prevAddressData,
+  //     [name]: value,
+  //   }));
+  // };
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    if (name === 'checking' && value === 'no') {
+      // Clear previousAddress when 'No' is selected
+      setAddressData({ address: value, previousAddress: '' });
+    } else {
+      setAddressData({ ...addressData, [name]: value });
     }
   };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setAddressData((prevAddressData) => ({
-      ...prevAddressData,
-      [name]: value,
-    }));
-  };
-
-
-
 
   return (
     <div className='Addform'>
@@ -70,13 +66,13 @@ const AddressFillForm = (props) => {
         <br />
         <h2>Enter Address Details</h2>
         <Form onSubmit={handleSubmit}>
-          <Form.Group controlId='address'>
-            <Form.Label>Address</Form.Label>
+          <Form.Group controlId='address1'>
+            <Form.Label>Address<span className='star'> *</span></Form.Label>
             <Form.Control
               type='text'
               placeholder='Enter Address'
-              name='address'
-              value={addressData.address}
+              name='address1'
+              value={addressData.address1}
               onChange={handleChange}
               required
             />
@@ -93,9 +89,9 @@ const AddressFillForm = (props) => {
             />
           </Form.Group>
 
-          <Row>
+          <Row className='row'>
             <Form.Group as={Col} controlId='city'>
-              <Form.Label>City</Form.Label>
+              <Form.Label>City <span className='star'> *</span></Form.Label>
               <Form.Control
                 type='text'
                 placeholder='Enter City'
@@ -107,7 +103,7 @@ const AddressFillForm = (props) => {
             </Form.Group>
 
             <Form.Group as={Col} controlId='state'>
-              <Form.Label>State</Form.Label>
+              <Form.Label>State <span className='star'> *</span></Form.Label>
               <Form.Control
                 type='text'
                 placeholder='Enter State'
@@ -118,14 +114,120 @@ const AddressFillForm = (props) => {
               />
             </Form.Group>
           </Row>
+          <br/>
+          <Row className='row'>
+            <Form.Group as={Col} controlId='homeTelephone'>
+              <Form.Label>HomeTelephone</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Enter Telephone'
+                name='number'
+                value={addressData.homeTelephone}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+          {/* </Row>
 
-          {showError && (
-            <Alert variant='danger'>Please fill in all the fields.</Alert>
-          )}
+          <Row> */}
+            <Form.Group as={Col} controlId='telephone'>
+              <Form.Label>Telephone</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Enter Telephone Number'
+                name='telephone'
+                value={addressData.telephone}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+              </Row>
+            
+            {/* <Row>
+            <Form.Group as={Col} controlId='address'>
+              <Form.Label>Have you lived at this address for more than 3 years?</Form.Label>
+              <Form.Control
+                type='radio'
+                 name='address'
+                value={addressData.address}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+            </Row> */}
 
-          {!isAddressValid && (
-            <Alert variant='danger'>Invalid address. Please check your address details.</Alert>
-          )}
+
+        
+        <Form.Group as={Col} controlId='address'>
+        <Row className='row'>
+          <Form.Label>Have you lived at this address for more than 3 years?<span className='star'> *</span></Form.Label>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Form.Check
+              type='radio'
+              name='address'
+              value='yes'
+              label='Yes'
+              checked={addressData.address === 'yes'}
+              onChange={handleChange}
+              required
+            />
+            <span style={{ margin: '0 10px' }}></span> {/* Space between options */}
+            <Form.Check
+              type='radio'
+              name='address'
+              value='no'
+              label='No'
+              checked={addressData.address === 'no'}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          </Row>
+        </Form.Group>
+      
+
+      {addressData.address === 'yes' && (
+        <Row className='row'>
+          <Form.Group as={Col} controlId='previousAddress'>
+            <Form.Label>Previous Address</Form.Label>
+            <Form.Control
+              type='text'
+              name='previousAddress'
+              value={addressData.previousAddress}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+        </Row>
+      )}
+
+{/* <Form.Group controlId='box'>
+      <Row>
+        <Col xs={1} className='checkbox-col'>
+          <Form.Check
+            type='checkbox'
+            name='box'
+            value={addressData.box}
+            onChange={handleChange}
+            required
+          />
+        </Col>
+        <Col xs={11}>
+          <Form.Label className='checkbox-label'>
+            I agree that my above information is checked with the Issuer or Official Record Holder
+          </Form.Label>
+        </Col>
+      </Row>
+            </Form.Group> */}
+
+<div class="form-check checkbox-lg"> 
+ <input class="form-check-input" type="checkbox" value="" id="checkbox-2"  /> 
+  <label class="form-check-label" for="checkbox-2">I agree that my above information is checked with the Issuer or Official Record Holder</label>
+  </div>
+
+
+          {errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}
+          {responseMessage && <Alert variant='success'>{responseMessage}</Alert>}
 
           <br />
           <center>

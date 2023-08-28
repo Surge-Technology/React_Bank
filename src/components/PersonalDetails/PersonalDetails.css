@@ -1,13 +1,16 @@
-.personalform {
+.personForm{
   /* background-color: #e6e5e5; */
-
-  height: 130vh;
-
+  height: 100vh;
   background-image: url("../../assets/images/header-background.jpg");
-
   background-repeat: no-repeat;
-
-  background-size: 100%;
-
+  background-size: 140%;
   box-shadow: 5px 8px 7px rgb(0, 0, 0);
+}
+
+.form-group label {
+  font-weight: bold;
+  font-size: 18px;
+}
+.star{
+color: rgba(180, 51, 51, 0.904);
 }

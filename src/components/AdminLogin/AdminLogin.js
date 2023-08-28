@@ -6,7 +6,7 @@ import { useState } from 'react';
 const initialLoginState ={
   email: '',
   password:'',
-  error:''
+ // error:''
 };
 
 // Define the Login component
@@ -27,11 +27,11 @@ export default function AdminLogin (props)  {
   function handleLogin(){
     //Validate if email and password are provided
     if(!login.email){
-      setLogin({...login,error:'Please enter email'});
+      // setLogin({...login,error:'Please enter email'});
     }else if (!login.password) {
-      setLogin({ ...login, error: "Please enter password" });
+      // setLogin({ ...login, error: "Please enter password" });
     } else{
-      props.history.push('adminactivetasklist');
+      props.history.push('AdminActiveTasklistDetail');
     }
 
   }
@@ -100,7 +100,7 @@ export default function AdminLogin (props)  {
 
               {/* Display the error message, if any */}
               <div className="text-center" style={{ color: "red" }}>
-                {login.error}
+                {/* {login.error} */}
               </div>
               </form>
         </article>

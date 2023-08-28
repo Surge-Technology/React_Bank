@@ -1,12 +1,12 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-const ActiveTaskList = () => {
+const ActiveTaskList = (props) => {
   const history = useHistory();
 
   const handleOpenButtonClick = () => {
     // Replace '/customer-query' with the actual path of the CustomerQuery page
-    history.push('customerQueryPage');
+    props.history.push('customerQueryPage');
   };
 
   return (

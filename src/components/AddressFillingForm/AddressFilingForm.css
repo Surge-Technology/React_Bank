@@ -5,7 +5,7 @@
   border: 1px solid #0a0909;
   border-radius: 15px;
   background-color: #f9f9f9;
-  height: 100vh;
+  height: 80vh;
   display: flex;
   font-size: medium;
 }
@@ -32,7 +32,7 @@ h2 {
 }
 .Addform{
   /* background-color: #e6e5e5; */
-  height: 200vh;
+  height: 110vh;
 
   background-image: url("../../assets/images/header-background.jpg");
   background-repeat: no-repeat;
@@ -43,4 +43,30 @@ label {
   display: inline-block;
   margin-bottom: 0.5rem;
   font-size: 25px;
+}
+.selected-radio {
+  background-color: #007bff; /* Change this to your desired color */
+  color: white;
+}
+
+.radio-button-group {
+  display: flex;
+  align-items: center;
+}
+
+.radio-button-space {
+  margin: 0 10px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -16px;
+  margin-left: -15px;
+}
+
+.checkbox-lg .form-check-input{ top: .8rem; scale: 1.4; margin-right: 0.7rem; }.checkbox-lg .form-check-label { padding-top: 13px; }
+.star{
+  color: rgba(180, 51, 51, 0.904);
+
 }

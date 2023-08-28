@@ -1,450 +1,346 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
 import "./registration.css";
-
 import axios from "axios";
-
 import { toast } from "react-toastify";
 
-
-
 function Registration(props) {
-
   const [userDetails, setUserDetails] = useState({
-
-    customerName: "",
-
+    firstName: "",
     email: "",
-
     lastName: "",
-
-    mobile: "",
-
+    phoneNo: '',
     password: "",
-
   });
 
-
-
   const [isOtpSent, setIsOtpSent] = useState(false);
-
   const [isOtpVerified, setIsOtpVerified] = useState(false);
-
   const [otpData, setOTPData] = useState({ otp: "", timestamp: 0 });
-
   const [errors, setErrors] = useState({});
+  const [showNotification, setShowNotification] = useState(false); // State for notification
 
 
+  const globalToast = (message) => {
+    toast.error(message);
+  };
 
-  function globalToast(message) {
-
-    return toast.error(message);
-
-  }
-  function successToast() {
-
+  const successToast = () => {
     toast.success("OTP Verified! Account Created Successfully");
+  };
 
-  }
-
-
-
-  function onChangeCustomerHandler(event) {
-
+  const onChangeCustomerHandler = (event) => {
     const updatedUserDetails = {
-
       ...userDetails,
-
       [event.target.name]: event.target.value,
-
     };
-
     setUserDetails(updatedUserDetails);
+  };
 
-  }
-
-
-
-  // Function to generate a random OTP
-
-  function generateOTP() {
-
-    const otpLength = 6;
-
-    const otpChars = "0123456789";
-
-    let otp = "";
-
-    for (let i = 0; i < otpLength; i++) {
-
-      otp += otpChars.charAt(Math.floor(Math.random() * otpChars.length));
-
-    }
-
-    return otp;
-
-  }
-
-
-
-  function formSubmitHandler() {
-
-    // Validate the form fields
-
-
+  const formSubmitHandler = () => {
     const newErrors = validateForm();
-
-    setErrors(newErrors);
-
-
     if (Object.keys(newErrors).length === 0) {
-      // if (!isOtpSent) {
-
-      //   // Generate OTP and send it to the user's email (Add your code to send OTP via email here)
-
-      //   const generatedOTP = generateOTP();
-
-      //   // Assuming the OTP has been successfully sent, update the state and store the OTP data
-
-      //   setIsOtpSent(true);
-
-      //   setOTPData({ otp: generatedOTP, timestamp: Date.now() });
-
-      //   globalToast("OTP has been sent to your email.");
-      //   props.history.push("Otp");
-
-      //  }
-
-
-      // }
-
-      //  
-            axios
-          .post(" http://localhost:8080/startWorkflow", userDetails)
-          .then((response) => {
-          alert("12453647586");
-          // Handle the response from the API if needed
-
-          console.log("API Response:", response.data);
-
+      axios
+        .post("http://localhost:8080/startWorkflow", userDetails)
+        .then((response) => {
+          sessionStorage.setItem("key", response.data);
           let key = response.data;
           console.log("key...", key);
           sessionStorage.setItem("key", key)
-          //       const processInstanceKey = sessionStorage.setItem(response.data.processInstanceKey);
-
-          //  sessionStorage.setItem("processInstanceKey", processInstanceKey);
-          // console.log("ProcessInstancekey",processInstanceKey)
-          //=================
-
-
-          // const processInstanceKey = response.data.processInstanceKey;
-
-          // sessionStorage.setItem("processInstanceKey", processInstanceKey);
-          // console.log("processInstanceKey",processInstanceKey)
-
-
-
-          const generatedOTP = generateOTP();
-
-          //   // Assuming the OTP has been successfully sent, update the state and store the OTP data
+          globalToast("OTP has been sent to your email.");
 
           setIsOtpSent(true);
-
-          setOTPData({ otp: generatedOTP, timestamp: Date.now() });
-
-          globalToast("OTP has been sent to your email.");
           props.history.push("Otp");
 
         })
-
         .catch((error) => {
-
-          // Handle any error that occurred during the API request
-
           console.error("API Error:", error);
-
           globalToast("Failed to submit form. Please try again later.");
-
         });
+    } else {
+      setShowNotification(true);
 
-       }
+      setErrors(newErrors);
+    }
+  };
 
-      // } 
-       else {
+  const validateForm = () => {
+    const newErrors = {};
 
-         globalToast("Please fill in all required fields.");
-
-       }
-
+    if (!userDetails.firstName.trim()) {
+      newErrors.firstName = "Full name is required";
     }
 
-
-
-    function validateForm() {
-
-      const newErrors = {};
-
-      if (!userDetails.customerName.trim()) {
-
-        newErrors.customerName = "Full name is required";
-
-      }
-
-      if (!userDetails.lastName.trim()) {
-
-        newErrors.lastName = "Last name is required";
-
-      }
-
-      if (!userDetails.email.trim()) {
-
-        newErrors.email = "Email address is required";
-
-      } else if (!/\S+@\S+\.\S+/.test(userDetails.email)) {
-
-        newErrors.email = "Invalid email address";
-
-      }
-
-      if (!userDetails.mobile.trim()) {
-
-        newErrors.mobile = "Phone number is required";
-
-      }
-
-      if (!userDetails.password.trim()) {
-
-        newErrors.password = "Password is required";
-
-      }
-
-      return newErrors;
-
+    if (!userDetails.lastName.trim()) {
+      newErrors.lastName = "Last name is required";
     }
 
+    if (!userDetails.email.trim()) {
+      newErrors.email = "Email address is required";
+    } else if (!/\S+@\S+\.\S+/.test(userDetails.email)) {
+      newErrors.email = "Invalid email address";
+    }
+
+   
+
+    if (!userDetails.password.trim()) {
+      newErrors.password = "Password is required";
+    }
+    if (!userDetails.phoneNo.trim()) {
+      newErrors.phoneNo = "Phone number is required";
+    }
+
+    return newErrors;
+  };
 
 
 
+  return (
 
-    return (
+    <div className="container-fluid">
 
-      <div className="container-fluid">
+      <div className="card bg-light bg">
 
-        <div className="card bg-light bg">
+        <article className="card-body mx-auto" style={{ width: "40%" }}>
+          <br /> <br /> <br />
+          <h6 className="display-4 text-center" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>
+            Reserve Bank of Australia
+          </h6>
+          <h5 className="text-center" >Create Account</h5><br />
 
-          <article className="card-body mx-auto" style={{ width: "40%" }}>
+          <p className="divider-text">
+            <span className="bg-light">Enter Details</span>
+          </p>
+          {showNotification && ( 
+        <div className="notification" >
+          Please enter all the required details.
+        </div>
+      )}
 
-            <h6 className="display-4 text-center">Australian Bank</h6>
 
-            <p className="text-center">Create Account</p>
+          <form>
 
-            <p className="divider-text">
+            <div className="form-group input-group">
 
-              <span className="bg-light">Enter Details</span>
+              <div className="input-group-prepend">
 
-            </p>
+                <span className="input-group-text">
 
-            <form>
+                  <i className="fa fa-user-plus iconsize"></i>
 
-              <div className="form-group input-group">
-
-                <div className="input-group-prepend">
-
-                  <span className="input-group-text">
-
-                    <i className="fa fa-user-plus iconsize"></i>
-
-                  </span>
-
-                </div>
-
-                <input
-
-                  name="customerName"
-
-                  className="form-control"
-
-                  placeholder="Full name"
-
-                  type="text"
-
-                  value={userDetails.customerName}
-
-                  onChange={onChangeCustomerHandler}
-
-                />
-
-              </div>
-
-              <div className="form-group input-group">
-
-                <div className="input-group-prepend">
-
-                  <span className="input-group-text">
-
-                    <i className="fa fa-user-plus iconsize"></i>
-
-                  </span>
-
-                </div>
-
-                <input
-
-                  name="lastName"
-
-                  className="form-control"
-
-                  placeholder="Last name"
-
-                  type="text"
-
-                  value={userDetails.lastName}
-
-                  onChange={onChangeCustomerHandler}
-
-                />
+                </span>
 
               </div>
 
+              <input
+
+                name="firstName"
+
+                className="form-control"
+
+                placeholder="First Name"
+
+                type="text"
+
+                value={userDetails.firstName}
+
+                onChange={onChangeCustomerHandler}
+                required
+              />
 
 
+            </div>
 
+            <div className="form-group input-group">
 
+              <div className="input-group-prepend">
 
+                <span className="input-group-text">
 
-              <div className="form-group input-group">
+                  <i className="fa fa-user-plus iconsize"></i>
 
-                <div className="input-group-prepend">
+                </span>
 
-                  <span className="input-group-text">
+              </div>
 
-                    <i className="fa fa-envelope iconsize"></i>
+              <input
 
-                  </span>
+                name="lastName"
 
-                </div>
+                className="form-control"
 
+                placeholder="Last name"
 
+                type="text"
 
-                <input
+                value={userDetails.lastName}
 
-                  name="email"
+                onChange={onChangeCustomerHandler}
+                required
+              />
 
-                  className="form-control"
+            </div>
+            <div className="form-group input-group">
 
-                  placeholder="Email address"
+              <div className="input-group-prepend">
 
-                  type="email"
+                <span className="input-group-text">
 
-                  value={userDetails.email}
+                  <i className="fa fa-envelope iconsize"></i>
 
-                  onChange={onChangeCustomerHandler}
-
-                />
+                </span>
 
               </div>
 
 
 
-              <div className="form-group input-group">
+              <input
 
-                <div className="input-group-prepend">
+                name="email"
 
-                  <span className="input-group-text">
+                className="form-control"
 
-                    <i className="fa fa-phone iconsize"></i>
+                placeholder="Email address"
 
-                  </span>
+                type="email"
 
-                </div>
+                value={userDetails.email}
 
+                onChange={onChangeCustomerHandler}
+                required
+              />
 
+            </div>
 
-                <select>
+            <div className="form-group input-group">
 
-                  <option selected="" value="+91">
+<div className="input-group-prepend">
 
-                    +91
+  <span className="input-group-text">
 
-                  </option>
+    <i className="fa fa-lock iconsize"></i>
 
+  </span>
 
-
-                  <option value="+0">+0</option>
-
-
-
-                  <option value="+1">+1</option>
-
-
-
-                  <option value="+44">+44</option>
+</div>
 
 
 
-                  <option value="+33">+33</option>
+<input
 
-                </select>
+  name="password"
 
+  className="form-control"
 
+  placeholder="Enter password"
 
-                <input
+  type="password"
 
-                  name="mobile"
+  value={userDetails.password}
 
-                  className="form-control"
+  onChange={onChangeCustomerHandler}
+  required
+/>
 
-                  placeholder="Phone number"
-
-                  type="text"
-
-                  value={userDetails.mobile}
-
-                  onChange={onChangeCustomerHandler}
-
-                />
-
-              </div>
+</div>
 
 
+            <div className="form-group input-group">
 
-              <div className="form-group input-group">
+              <div className="input-group-prepend">
 
-                <div className="input-group-prepend">
+                <span className="input-group-text">
 
-                  <span className="input-group-text">
+                  <i className="fa fa-phone iconsize"></i>
 
-                    <i className="fa fa-lock iconsize"></i>
-
-                  </span>
-
-                </div>
-
-
-
-                <input
-
-                  name="password"
-
-                  className="form-control"
-
-                  placeholder="Create password"
-
-                  type="password"
-
-                  value={userDetails.password}
-
-                  onChange={onChangeCustomerHandler}
-
-                />
+                </span>
 
               </div>
 
 
 
-              {!isOtpSent && (
+              <select>
+
+                <option selected="" value="+91">
+
+                  +91
+
+                </option>
+
+
+
+                <option value="+0">+0</option>
+
+
+
+                <option value="+1">+61</option>
+
+
+
+                <option value="+44">+44</option>
+
+
+
+                <option value="+33">+33</option>
+
+              </select>
+
+
+
+              <input
+
+                name="phoneNo"
+
+                className="form-control"
+
+                placeholder="Phone Number"
+
+                type="number"
+
+                value={userDetails.phoneNo}
+
+                onChange={onChangeCustomerHandler}
+                required
+              />
+
+            </div>
+
+
+
+           
+
+
+
+            {!isOtpSent && (
+
+              <div className="form-group">
+
+                <button
+
+                  type="button"
+
+                  onClick={formSubmitHandler}
+
+                  className="btn btn-primary btn-block"
+
+                >
+
+                  Submit
+
+                </button>
+
+              </div>
+
+            )}
+
+
+
+            {isOtpSent && !isOtpVerified && (
+
+              <div>
+
+                <p>OTP has been sent to your email.</p>
+
+
 
                 <div className="form-group">
 
@@ -458,108 +354,78 @@ function Registration(props) {
 
                   >
 
-                    Submit
+                    Verify OTP
 
                   </button>
 
                 </div>
 
-              )}
+              </div>
+
+            )}
 
 
 
-              {isOtpSent && !isOtpVerified && (
+            {isOtpVerified && (
 
-                <div>
+              <div className="form-group">
 
-                  <p>OTP has been sent to your email.</p>
+                <button
 
+                  type="button"
 
+                  onClick={() => {
 
-                  <div className="form-group">
-
-                    <button
-
-                      type="button"
-
-                      onClick={formSubmitHandler}
-
-                      className="btn btn-primary btn-block"
-
-                    >
-
-                      Verify OTP
-
-                    </button>
-
-                  </div>
-
-                </div>
-
-              )}
+                    successToast();
 
 
 
-              {isOtpVerified && (
-
-                <div className="form-group">
-
-                  <button
-
-                    type="button"
-
-                    onClick={() => {
-
-                      successToast();
+                    // Redirect to the login page after OTP is verified
 
 
 
-                      // Redirect to the login page after OTP is verified
+                    props.history.push("login");
+
+                  }}
+
+                  className="btn btn-primary btn-block"
+
+                >
+
+                  Create Account
+
+                </button>
+
+              </div>
+
+            )}
 
 
 
-                      props.history.push("login");
+            <p
 
-                    }}
+              className="text-center"
 
-                    className="btn btn-primary btn-block"
+              style={{ color: "black", fontSize: "23px" }}
 
-                  >
+            >
 
-                    Create Account
+              Have an account? <Link to="login">Login</Link>
 
-                  </button>
+            </p>
 
-                </div>
+          </form>
 
-              )}
-
-
-
-              <p
-
-                className="text-center"
-
-                style={{ color: "white", fontSize: "23px" }}
-
-              >
-
-                Have an account? <Link to="login">Login</Link>
-
-              </p>
-
-            </form>
-
-          </article>
-
-        </div>
+        </article>
 
       </div>
 
-    );
+    </div>
 
-  }
+  );
+
+}
 
 
 
-  export default Registration;
+export default Registration;

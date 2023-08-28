@@ -39,13 +39,16 @@ const AdminActiveTasklistDetail = () => {
                 <td>{user.name}</td>
                 <td>{user.processName}</td>
                 <td>
-                  <Link
-                    className="btn btn-info"
-                    to={`/adminactivetaskbyid`}
-                  >
-                    View
-                  </Link>
-                </td>
+                                    <Link
+                                        className="btn btn-info"
+                                        to={{
+                                            pathname: `/ActiveTaskList/${user.id}`, // Pass the task ID in the URL
+                                            state: { taskId: user.id } // Pass the task ID in the state
+                                        }}
+                                    >
+                                        View
+                                    </Link>
+                                </td>
               </tr>
             ))
           ) : (

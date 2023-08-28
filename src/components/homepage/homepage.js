@@ -10,7 +10,7 @@ function HomePage() {
       className="container-fluid p-0"
       style={{ height: "100vh", backgroundColor: "#e0fcff" }}
     >
-      <Header message="Welcome To Australian Banking" />
+      <Header message="Welcome To Reserve Bank of Australia" />
 
       <div className="row homepageaction">
         <div className="col-sm-3 offset-3">
@@ -42,7 +42,7 @@ function HomePage() {
               to="registration"
               style={{ textDecoration: "none", color: "white" }}
             >
-              Sign Up
+            Become a  RBA Member
               <span style={{ float: "right" }}>
                 <i
                   className="fas fa-user-plus"

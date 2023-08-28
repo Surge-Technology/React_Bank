@@ -34,56 +34,86 @@ export default function AdminLogin(props) {
     );
   }
 
-  function handleLogin(e) {
-    if (login.username) {
-      if (login.password) {
-        apiCall()
-          .then(data => {
-            setState({ ...state, customer: data.data });
-            if (state.customer.user.role === "ROLE_USER") {
-              setLogin({ ...login, error: "Insufficient Previllages" });
-            }
-          })
-          .catch(error => {
-            console.log(error.response.data);
-            setLogin({
-              ...login,
-              error: error.response.data
-            });
-          });
-      } else {
-        setLogin({ ...login, error: "Please enter password" });
+  // function handleLogin(e) 
+  // {
+  //   if (login.username) {
+  //     if (login.password) {
+  //       apiCall()
+  //         .then(data => {
+  //           setState({ ...state, customer: data.data });
+  //           if (state.customer.user.role === "ROLE_USER") {
+  //             setLogin({ ...login, error: "Insufficient Previllages" });
+  //           }
+  //         })
+  //         .catch(error => {
+  //           console.log(error.response.data);
+  //           setLogin({
+  //             ...login,
+  //             error: error.response.data
+  //           });
+  //         });
+  //     } else {
+  //       setLogin({ ...login, error: "Please enter password" });
+  //     }
+  //   } else {
+  //     setLogin({ ...login, error: "Please enter username" });
+  //   }
+  // }
+
+  // function redirect() {
+  //   //console.log(state.customer);
+  //   if (state.customer.user.role === "ROLE_ADMIN") {
+  //     //alert("Login Success");
+  //     auth.login();
+  //     auth.setHeader(login.username, login.password);
+  //     toast.success("Login Success");
+  //     props.history.push("dashboard", { customer: state.customer });
+  //     // return (
+  //     //   <Link
+  //     //     className="btn btn-success btn-block"
+  //     //     style={{ textDecoration: "none" }}
+  //     //     to={{
+  //     //       pathname: "useraction",
+  //     //       state: {
+  //     //         customer: state.customer
+  //     //       }
+  //     //     }}
+  //     //   >
+  //     //     Continue
+  //     //   </Link>
+  //     //);
+  //   }
+  // }
+  async function handleLogin() {
+    if (login.username && login.password) {
+      try {
+        const response = await apiCall();
+        setState({ ...state, customer: response.data });
+
+        if (response.data.user.role === "ROLE_ADMIN") {
+          auth.login();
+          auth.setHeader(login.username, login.password);
+          toast.success("Login Success");
+          redirectToDashboard();
+        } else {
+          setLogin({ ...login, error: "Insufficient Privileges" });
+        }
+      } catch (error) {
+        console.log(error.response.data);
+        setLogin({
+          ...login,
+          error: error.response.data
+        });
       }
     } else {
-      setLogin({ ...login, error: "Please enter username" });
+      setLogin({ ...login, error: "Please enter both username and password" });
     }
   }
 
-  function redirect() {
-    //console.log(state.customer);
-    if (state.customer.user.role === "ROLE_ADMIN") {
-      //alert("Login Success");
-      auth.login();
-      auth.setHeader(login.username, login.password);
-      toast.success("Login Success");
-      props.history.push("dashboard", { customer: state.customer });
-      // return (
-      //   <Link
-      //     className="btn btn-success btn-block"
-      //     style={{ textDecoration: "none" }}
-      //     to={{
-      //       pathname: "useraction",
-      //       state: {
-      //         customer: state.customer
-      //       }
-      //     }}
-      //   >
-      //     Continue
-      //   </Link>
-      //);
-    }
+  function redirectToDashboard() {
+    // props.history.push("dashboard", { customer: state.customer });
+props.history.push('AdminActiveTasklistDetail')
   }
-
   return (
     <div className="container-fluid back">
       <Header message="Admin LoGin" />
@@ -142,7 +172,7 @@ export default function AdminLogin(props) {
               <div className="text-center" style={{ color: "red" }}>
                 {login.error}
               </div>
-              {redirect()}
+              {/* {redirect()} */}
               <br />
             </form>
           </article>

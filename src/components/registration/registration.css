@@ -21,10 +21,11 @@
 }
 
 .bg {
-  background-image: url("../../assets/images/feature-background.jpg");
+  background-image: url("../../assets/images/piggy-bank.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   box-shadow: 5px 8px 7px rgb(0, 0, 0);
+  height: 100%;
 }
 
 input {
@@ -41,3 +42,12 @@ select {
 .custom-select{
   height:"50px"
 }
+
+.notification {
+  background-color: red;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
