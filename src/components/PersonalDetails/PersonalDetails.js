@@ -27,7 +27,7 @@ const PersonalDetails = (props) => {
     annualIncome: 0,
 
     accountType: "",
-
+    phoneNo: 0
   });
 
 
@@ -43,17 +43,17 @@ const PersonalDetails = (props) => {
     lastName,
 
     dob,
-    gender,
+    gender = gender.toString(),
+
+    accountType: selected,
+    phoneNo,
 
 
-
-
-    accountType,
 
   } = data;
 
-  const [selectedAccountType, setSelectedAccountType] = useState("");
-  const [selected, setSelected] = useState('');
+  // const [accountType, setAccountType] = useState("");
+  // const [selected, setSelected] = useState('');
 
 
   const onSubmit = (e) => {
@@ -134,15 +134,30 @@ const PersonalDetails = (props) => {
 
 
 
+
+
   const onInputChange = (e) => {
 
     setData({ ...data, [e.target.name]: e.target.value });
 
+
   };
+
+  const handleGenderChange = (event) => {
+    setData({ ...data, gender: event.target.value });
+  };
+
+  const handleAccountTypeChange = (event) => {
+    setData({ ...data, accountType: event.target.value });
+  };
+
 
   const handleChange = event => {
     console.log(event.target.value);
-    setSelected(event.target.value);
+    // setSelected(event.target.value);
+    // setSelected1(event.target.value);
+    // setGender(event.target.value);
+
   };
 
 
@@ -277,7 +292,7 @@ const PersonalDetails = (props) => {
 
               <input
 
-                type="date"
+                type="text"
 
                 className="form-control"
 
@@ -299,72 +314,132 @@ const PersonalDetails = (props) => {
 
           <div className="form-group row">
 
-            <label htmlFor="gender" className="col-sm-2 col-form-label">
+            <label htmlFor="phoneNo" className="col-sm-2 col-form-label">
 
-              <strong>Gender</strong>
+              <strong>Phone Number</strong>
 
             </label>
+
             <div className="col-sm-8">
 
               <input
-                type="radio"
-                id="male"
-                name="choose"
-                value="Male"
-                checked={selected === 'Male'}
-                onChange={handleChange}
-              />
-              <label htmlFor="Male">Male</label>
+
+                type="text"
+
+                className="form-control"
+
+                id="phoneNo"
+
+                placeholder="Phone Number"
+
+                name="phoneNo"
+
+                value={phoneNo}
+
+                onChange={(e) => onInputChangeInt(e)}
+
+              ></input>
+
+            </div>
+
+          </div>
+
+          <div className="form-group row">
+            <label htmlFor="gender" className="col-sm-2 col-form-label">
+              <strong>Gender</strong>
+            </label>
+            <div className="col-sm-8">
+              <select
+                className="form-control"
+                id="gender"
+                name="gender"
+                value={gender}
+                onChange={(e) => handleGenderChange(e)}
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          {/* <div className="form-group row">
+  <label htmlFor="gender" className="col-sm-2 col-form-label">
+    <strong>Gender</strong>
+  </label>
+  <div className="col-sm-8">
+    <select
+      className="form-control"
+      id="gender"
+      name="gender"
+      value={gender}
+      onChange={(e) => onInputChange(e)}
+    >
+      <option value="">Select Gender</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
+</div> */}
+
+
+
+
+          {/* <Form.Group controlId='gender'>
+            <label>Gender</label>
+            <Form.Control
+              id='gender'
+              as='select'
+              name='gender'
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+            >
+              <option value=''>Select Gender</option>
+              <option value='male'>Male</option>
+              <option value='female'>Female</option>
+              <option value='other'>Other</option>
+            </Form.Control>
+          </Form.Group> */}
+
+
+          <div className="form-group row">
+
+            <label htmlFor="annualIncome" className="col-sm-2 col-form-label">
+
+              <strong>Annual Income <span className="star">*</span></strong>
+
+            </label>
+
+            <div className="col-sm-8">
 
               <input
-                type="radio"
-                id="Female"
-                name="choose"
-                value="Female"
-                onChange={handleChange}
-                checked={selected === 'Female'}
-              />
-              <label htmlFor="Female">Female</label>
-            </div>
-</div>
 
+                type="number"
 
-            <div className="form-group row">
+                className="form-control"
 
-              <label htmlFor="annualIncome" className="col-sm-2 col-form-label">
+                id="annualIncome"
 
-                <strong>Annual Income <span className="star">*</span></strong>
+                placeholder="Annual Income"
 
-              </label>
+                name="annualIncome"
 
-              <div className="col-sm-8">
+                value={annualIncome}
 
-                <input
+                onChange={onInputChangeInt}
 
-                  type="number"
+                required
+                min={2}
 
-                  className="form-control"
-
-                  id="annualIncome"
-
-                  placeholder="Annual Income"
-
-                  name="annualIncome"
-
-                  value={annualIncome}
-
-                  onChange={onInputChangeInt}
-
-                  required
-                  min={2}
-
-                ></input>
-
-              </div>
+              ></input>
 
             </div>
 
-            {/* <div className="form-group row">
+          </div>
+
+          {/* <div className="form-group row">
 
             <label htmlFor="accountType" className="col-sm-2 col-form-label">
 
@@ -372,68 +447,81 @@ const PersonalDetails = (props) => {
 
             </label> */}
 
-            {/* <div className="col-sm-8">
 
-              <input
-
-                type="radio"
-
-                className="form-control"
-
-                id="accountType"
-
-                placeholder="accountType"
-
-                name="accountType"
-
-                value={accountType}
-
-                onChange={(e) => onInputChange(e)}
-
-              ></input>
-
-            </div> */}
-            <div className="form-group row">
-              <label className="col-sm-2 col-lg-2">
-                <strong>Account Type</strong>
-              </label>
-              <div className="col-sm-8">
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="selectedAccountType"
-                    value="savings"
-                    checked={selectedAccountType === "savings"}
-                    onChange={() => setSelectedAccountType("savings")}
-                  />
-                  <label className="form-check-label">Savings</label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="selectedAccountType"
-                    value="current"
-                    checked={selectedAccountType === "current"}
-                    onChange={() => setSelectedAccountType("current")}
-                  />
-                  <label className="form-check-label">Current</label>
-                </div>
+          {/* <div className="form-group row">
+            <label className="col-sm-2 col-lg-2">
+              <strong>Account Type</strong>
+            </label>
+            <div className="col-sm-8">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="selectedAccountType"
+                  value="savings"
+                  checked={selectedAccountType === "savings"}
+                  onChange={() => setSelectedAccountType("savings")}
+                />
+                <label className="form-check-label">Savings</label>
+              </div>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="selectedAccountType"
+                  value="current"
+                  checked={selectedAccountType === "current"}
+                  onChange={() => setSelectedAccountType("current")}
+                />
+                <label className="form-check-label">Current</label>
               </div>
             </div>
+          </div> */}
+          <div className="form-group row">
 
-            {/* </div> */}
+            <label htmlFor="accountType" className="col-sm-2 col-form-label">
 
-            <center>
+              <strong>AccountType</strong>
 
-              <Button variant="primary" type="submit">
+            </label>
+            <br /><br />
+            <div className="col-sm-8" style={{ display: 'flex', alignItems: 'center' }}>
 
-                Submit
+              <input
+                type="radio"
+                id="savings"
+                name="choose"
+                value="saving"
+                checked={selected === 'saving'}
+                onChange={handleAccountTypeChange}
+              />
+              <label htmlFor="saving" >Savings</label>
+              <span style={{ margin: '0 10px' }}></span>
 
-              </Button>
+              <input
+                type="radio"
+                id="current"
+                name="choose"
+                value="current"
+                onChange={handleChange}
+                checked={selected === 'current'}
+              />
+              <label htmlFor="current">Current</label>
+            </div>
+          </div>
 
-            </center>
+
+          {/* </div> */}
+
+          <center>
+
+            <Button variant="primary" type="submit">
+
+              Submit
+
+            </Button>
+
+          </center>
 
         </form>
 

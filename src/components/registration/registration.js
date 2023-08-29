@@ -56,6 +56,7 @@ function Registration(props) {
           console.error("API Error:", error);
           globalToast("Failed to submit form. Please try again later.");
         });
+        alert("Registered Successfully!!!!")
     } else {
       setShowNotification(true);
 
@@ -82,12 +83,12 @@ function Registration(props) {
 
    
 
-    if (!userDetails.password.trim()) {
-      newErrors.password = "Password is required";
-    }
-    if (!userDetails.phoneNo.trim()) {
-      newErrors.phoneNo = "Phone number is required";
-    }
+    // if (!userDetails.password.trim()) {
+    //   newErrors.password = "Password is required";
+    // }
+    // if (!userDetails.phoneNo.trim()) {
+    //   newErrors.phoneNo = "Phone number is required";
+    // }
 
     return newErrors;
   };
@@ -244,7 +245,7 @@ function Registration(props) {
 </div>
 
 
-            <div className="form-group input-group">
+            {/* <div className="form-group input-group">
 
               <div className="input-group-prepend">
 
@@ -302,7 +303,7 @@ function Registration(props) {
                 required
               />
 
-            </div>
+            </div> */}
 
 
 
