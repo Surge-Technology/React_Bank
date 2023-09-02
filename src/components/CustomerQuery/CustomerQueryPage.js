@@ -1,54 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./CustomerQueryPage.css";
-import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const CustomerQueryPage = () => {
-  const [customerQuery, setCustomerQuery] = useState(""); // State to store the customer query
   const location = useLocation();
-  const query = location.state ? location.state.query : '';
-  useEffect(() => {
-    // Fetch the customer query from the API when the component mounts
-    fetchCustomerQuery();
-  }, []);
+  const [query, setQuery] = useState("");
+  const queryData = location.state ? location.state.queryData : '';
 
-  const fetchCustomerQuery = async () => {
-    try {
-      // Fetch the customer query using a GET API
-      const response = await axios.get('http://localhost:8080/getAllConsumerData');
-
-      // Update the customer query state with the retrieved data
-      setCustomerQuery(response.data.customerQuery);
-
-    } catch (error) {
-      console.error('Error while fetching customer query:', error);
-    }
-  }
+  const handleQueryChange = (event) => {
+    setQuery(event.target.value);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      let processInstanceKey=sessionStorage.getItem("key");
-
-      console.log("dataaaa",processInstanceKey);
-      // Send the customer query along with other form data to the API
-      const response = await axios.post('http://localhost:8080/completeMessageEvent/', {
-        customerQuery: customerQuery,
-      });
+      const response = await axios.post('http://localhost:8080/completeMessageEvent', 
+      { query: query }, 
+      { headers: { 'Content-Type': 'application/json' } }
+      );
       alert("Document is submitted");
-
       console.log("API Response:", response);
-
     } catch (error) {
       console.error('Error while submitting query:', error);
     }
-  }
-
-  const handleQueryChange = (event) => {
-    setCustomerQuery(event.target.value); // Update the customer query state
+    alert(" Your Document is submitted")
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/getAllConsumerData');
+        console.log("Fetched Data:", response.data);
+      } catch (error) {
+        console.error('Error while fetching data:', error);
+      }
+    };
+
+    fetchData(); 
+  }, []); 
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
@@ -56,45 +48,27 @@ const CustomerQueryPage = () => {
         <h1 className="mb-4">Query from RBA</h1>
         <div className="row">
           <div className="col-md-6">
-            {/* Customer Message Box */}
             <div className="customer-message-box">
-              {/* <h3> Query from RBA </h3> */}
               <p>
-
                 Hii, This message from Reserve Bank of Australia giving a some message to you, submit the required mentioned below files.
-
               </p>
-             
-              <p>{query}</p>
-              
             </div>
+
+            <h3 className="mb-4">Application Status :<span style={{ margin: '0 10px' }}>In Progress</span></h3>
+            {/* <h4>Query :{AdminQuery}</h4> */}
           </div>
+         
           <div className="col-md-6">
-            {/* Message Form */}
-            <form>
-              {/* <div className="form-group">
-                <label htmlFor="name">Name</label>
-                <input type="text" className="form-control" id="name" />
-              </div>
+            <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input type="email" className="form-control" id="email" />
-              </div> */}
-              <div className="form-group">
-                <label htmlFor="message">Customer Query</label>
-                <textarea
-                  className="form-control fixed-textarea"
-                  id="message"
-                  rows="4"
-                  value={customerQuery}
-                  onChange={handleQueryChange} // Update the query state as the user types
-                />
+                <label htmlFor="message">Comments</label>
+                <textarea className="form-control fixed-textarea" id="message" rows="4" onChange={handleQueryChange}></textarea>
               </div>
               <div className="form-group">
                 <label htmlFor="document">Upload Document</label>
                 <input type="file" className="form-control-file" id="document" />
               </div>
-              <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Submit</button>
+              <button type="submit" className="btn btn-primary">Submit</button>
             </form>
           </div>
         </div>

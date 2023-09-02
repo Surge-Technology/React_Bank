@@ -138,7 +138,7 @@ export default function Login(props) {
 
 
           if (login.email === "admin@gmail.com") {
-            props.history.push("AdminActiveTasklistDetail");
+            props.history.push("ApproverForm");
           } else {
             props.history.push("AddressFillForm");
           }

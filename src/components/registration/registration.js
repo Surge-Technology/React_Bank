@@ -6,10 +6,10 @@ import { toast } from "react-toastify";
 
 function Registration(props) {
   const [userDetails, setUserDetails] = useState({
-    firstName: "",
+    username: "",
     email: "",
-    lastName: "",
-    phoneNo: '',
+    // lastName: "",
+    // phoneNo: '',
     password: "",
   });
 
@@ -56,7 +56,7 @@ function Registration(props) {
           console.error("API Error:", error);
           globalToast("Failed to submit form. Please try again later.");
         });
-        alert("Registered Successfully!!!!")
+        alert("Submitted Successfully!!!!")
     } else {
       setShowNotification(true);
 
@@ -67,13 +67,13 @@ function Registration(props) {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!userDetails.firstName.trim()) {
-      newErrors.firstName = "Full name is required";
+    if (!userDetails.username.trim()) {
+      newErrors.username = "User name is required";
     }
 
-    if (!userDetails.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
-    }
+    // if (!userDetails.lastName.trim()) {
+    //   newErrors.lastName = "Last name is required";
+    // }
 
     if (!userDetails.email.trim()) {
       newErrors.email = "Email address is required";
@@ -83,9 +83,9 @@ function Registration(props) {
 
    
 
-    // if (!userDetails.password.trim()) {
-    //   newErrors.password = "Password is required";
-    // }
+    if (!userDetails.password.trim()) {
+      newErrors.password = "Password is required";
+    }
     // if (!userDetails.phoneNo.trim()) {
     //   newErrors.phoneNo = "Phone number is required";
     // }
@@ -134,15 +134,15 @@ function Registration(props) {
 
               <input
 
-                name="firstName"
+                name="username"
 
                 className="form-control"
 
-                placeholder="First Name"
+                placeholder="User Name"
 
                 type="text"
 
-                value={userDetails.firstName}
+                value={userDetails.username}
 
                 onChange={onChangeCustomerHandler}
                 required
@@ -151,7 +151,7 @@ function Registration(props) {
 
             </div>
 
-            <div className="form-group input-group">
+            {/* <div className="form-group input-group">
 
               <div className="input-group-prepend">
 
@@ -179,7 +179,7 @@ function Registration(props) {
                 required
               />
 
-            </div>
+            </div> */}
             <div className="form-group input-group">
 
               <div className="input-group-prepend">

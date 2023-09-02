@@ -13,6 +13,8 @@ import { useHistory } from "react-router-dom";
 const PersonalDetails = (props) => {
 
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
+
   const [data, setData] = useState({
 
     firstName: "",
@@ -56,71 +58,42 @@ const PersonalDetails = (props) => {
   // const [selected, setSelected] = useState('');
 
 
-  const onSubmit = (e) => {
+  const onSubmit = async (event) => {
+    setIsLoading(true);
 
-    e.preventDefault();
-
-
-
-    let processInstanceKey = sessionStorage.getItem("key");
-
-    console.log("dataaaa", processInstanceKey);
+    event.preventDefault();
 
 
 
-    const result = Axios.post(
+    let activeTaskId = sessionStorage.getItem("jobKey");
 
-      `http://localhost:8080/GetCreditScore/${processInstanceKey}`,
+    console.log("activeTaskId", activeTaskId);
 
+    data.activeTaskId = activeTaskId;
+
+
+
+    const result = await Axios.post(
+
+
+      'http://localhost:8080/completeUserTask',
       data
 
     );
 
+const name=sessionStorage.setItem(firstName,"firstName")
+ console.log(name);
     console.log("resulttt" + JSON.stringify(result));
 
-
-
-    let baseScore = 500;
-
-    let ageFactor = 10;
-
-    // let incomeFactor = 0.01;
-
-
-
-    let ageScore = age * ageFactor;
-
-    let incomeScore = annualIncome / 1000;
+    const localTaskNames = result.data.extractedInfo.locTaskName;
+    const jobKey = result.data.extractedInfo.jobKey;
+    sessionStorage.setItem("jobKey", jobKey);
+    alert("localTaskNames", localTaskNames);
+    props.history.push('/' + localTaskNames);
 
 
 
-    let creditScore = baseScore + ageScore + Math.floor(incomeScore);
-
-
-
-
-
-    // const creditScore = result.data.creditScore;
-
-    console.log("creditScore", creditScore);
-
-
-
-    if (creditScore > 700) {
-
-      history.push("/happyPath");
-
-    } else if (creditScore >= 500 && creditScore <= 700) {
-
-      history.push("/Popup");
-
-    } else {
-
-      history.push("/registrationReject");
-
-    }
-
-    //props.history.push('happyPath')
+    setIsLoading(false);
 
   };
 
@@ -154,9 +127,7 @@ const PersonalDetails = (props) => {
 
   const handleChange = event => {
     console.log(event.target.value);
-    // setSelected(event.target.value);
-    // setSelected1(event.target.value);
-    // setGender(event.target.value);
+
 
   };
 
@@ -166,6 +137,12 @@ const PersonalDetails = (props) => {
     <div className="personForm">
       <div className="container">
         <br />
+
+        {isLoading && (
+          <div className="overlay">
+            <div className="loading-spinner"></div>
+          </div>
+        )}
         <center>
 
           <h2>Personal Details</h2>
@@ -312,7 +289,8 @@ const PersonalDetails = (props) => {
 
           </div>
 
-          <div className="form-group row">
+
+          {/* <div className="form-group row">
 
             <label htmlFor="phoneNo" className="col-sm-2 col-form-label">
 
@@ -331,6 +309,38 @@ const PersonalDetails = (props) => {
                 id="phoneNo"
 
                 placeholder="Phone Number"
+
+                name="phoneNo"
+
+                value={phoneNo}
+
+                onChange={(e) => onInputChangeInt(e)}
+
+              ></input>
+
+            </div>
+
+          </div> */}
+
+          <div className="form-group row">
+
+            <label htmlFor="phoneNo" className="col-sm-2 col-form-label">
+
+              <strong>Phone No</strong>
+
+            </label>
+
+            <div className="col-sm-8">
+
+              <input
+
+                type="text"
+
+                className="form-control"
+
+                id="phoneNo"
+
+                placeholder="Enter PhoneNo"
 
                 name="phoneNo"
 
@@ -364,51 +374,11 @@ const PersonalDetails = (props) => {
             </div>
           </div>
 
-          {/* <div className="form-group row">
-  <label htmlFor="gender" className="col-sm-2 col-form-label">
-    <strong>Gender</strong>
-  </label>
-  <div className="col-sm-8">
-    <select
-      className="form-control"
-      id="gender"
-      name="gender"
-      value={gender}
-      onChange={(e) => onInputChange(e)}
-    >
-      <option value="">Select Gender</option>
-      <option value="male">Male</option>
-      <option value="female">Female</option>
-      <option value="other">Other</option>
-    </select>
-  </div>
-</div> */}
-
-
-
-
-          {/* <Form.Group controlId='gender'>
-            <label>Gender</label>
-            <Form.Control
-              id='gender'
-              as='select'
-              name='gender'
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-            >
-              <option value=''>Select Gender</option>
-              <option value='male'>Male</option>
-              <option value='female'>Female</option>
-              <option value='other'>Other</option>
-            </Form.Control>
-          </Form.Group> */}
-
-
           <div className="form-group row">
 
             <label htmlFor="annualIncome" className="col-sm-2 col-form-label">
 
-              <strong>Annual Income <span className="star">*</span></strong>
+              <strong>annualIncome</strong>
 
             </label>
 
@@ -416,7 +386,7 @@ const PersonalDetails = (props) => {
 
               <input
 
-                type="number"
+                type="text"
 
                 className="form-control"
 
@@ -428,10 +398,7 @@ const PersonalDetails = (props) => {
 
                 value={annualIncome}
 
-                onChange={onInputChangeInt}
-
-                required
-                min={2}
+                onChange={(e) => onInputChangeInt(e)}
 
               ></input>
 
@@ -439,44 +406,6 @@ const PersonalDetails = (props) => {
 
           </div>
 
-          {/* <div className="form-group row">
-
-            <label htmlFor="accountType" className="col-sm-2 col-form-label">
-
-              <strong>AccountType</strong>
-
-            </label> */}
-
-
-          {/* <div className="form-group row">
-            <label className="col-sm-2 col-lg-2">
-              <strong>Account Type</strong>
-            </label>
-            <div className="col-sm-8">
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="selectedAccountType"
-                  value="savings"
-                  checked={selectedAccountType === "savings"}
-                  onChange={() => setSelectedAccountType("savings")}
-                />
-                <label className="form-check-label">Savings</label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="selectedAccountType"
-                  value="current"
-                  checked={selectedAccountType === "current"}
-                  onChange={() => setSelectedAccountType("current")}
-                />
-                <label className="form-check-label">Current</label>
-              </div>
-            </div>
-          </div> */}
           <div className="form-group row">
 
             <label htmlFor="accountType" className="col-sm-2 col-form-label">
@@ -509,9 +438,6 @@ const PersonalDetails = (props) => {
               <label htmlFor="current">Current</label>
             </div>
           </div>
-
-
-          {/* </div> */}
 
           <center>
 

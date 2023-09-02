@@ -1,12 +1,26 @@
 import React, {useState}from 'react'
 import sad from '../assets/images/sad.png'
+import Axios from 'axios';
 export default function RegistrationReject() {
   const [showModal, setShowModal] = useState(false); // State for showing/hiding the modal
 
- 
+ const requestbody = ({});
 
   const handleModalClose = () => {
+    alert("reject");
+
+    let processInstanceKey = sessionStorage.getItem("key");
+
+    console.log("processInstanceKey", processInstanceKey);
+
+    const result = Axios.post(`http://localhost:8080/completeTaskWithInstanceId/${processInstanceKey}`, requestbody)
+
+    console.log(result)
+    alert(result+"......")
+
     setShowModal(false); // Close the modal when the "OK" button is clicked
+    // props.history.push('Login')
+
   };
   return (
     <div>

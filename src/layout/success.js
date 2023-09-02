@@ -12,9 +12,11 @@ export default function CongratulationsScreen(props) {
 
   const requestbody = ({});
 
-
+ const firstName=sessionStorage.getItem("firstName")
+ alert(firstName);
 
   const handleModalClose = () => {
+    alert("success");
 
     let processInstanceKey = sessionStorage.getItem("key");
 
@@ -23,6 +25,7 @@ export default function CongratulationsScreen(props) {
     const result = Axios.post(`http://localhost:8080/completeTaskWithInstanceId/${processInstanceKey}`, requestbody)
 
     console.log(result)
+    alert(result+"......")
 
     setShowModal(false); // Close the modal when the "OK" button is clicked
     // props.history.push('Login')
@@ -97,7 +100,7 @@ export default function CongratulationsScreen(props) {
 
                     <td bgcolor="#ffffff" align="center" valign="top" style={{ padding: '40px 20px 20px 20px', borderRadius: '4px 4px 0px 0px', color: '#111111', fontFamily: 'Lato, Helvetica, Arial, sans-serif', fontSize: '48px', fontWeight: 400, letterSpacing: '4px', lineHeight: '48px' }}>
 
-                      <h1 style={{ fontSize: '48px', fontWeight: 400, margin: '2', fontFamily: 'fantasy' }}>Congratualations</h1>
+                      <h1 style={{ fontSize: '48px', fontWeight: 400, margin: '2', fontFamily: 'fantasy' }}>Account Confirmation</h1>
 
                       <img src="https://img.icons8.com/clouds/100/000000/handshake.png" width="125" height="120" style={{ display: 'block', border: '0px' }} />
 
@@ -137,7 +140,7 @@ export default function CongratulationsScreen(props) {
 
                           <li>Account Type: [Saving Type]</li>
 
-                          <li>Account Holder: [Pratip]</li>
+                          <li>Account Holder:<span id="firstName"></span> </li>
 
                         </ul>
 

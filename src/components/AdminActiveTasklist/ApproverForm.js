@@ -3,7 +3,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
-const AdminActiveTasklistDetail = () => {
+const AdminActiveTasklistDetail = (props) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -15,6 +15,7 @@ const AdminActiveTasklistDetail = () => {
       const response = await Axios.get('http://localhost:8080/getActivedTaskList');
       setUsers(response.data); // Assuming the response data is an array of users
       console.log("resssss"+JSON.stringify(response.data));
+      
     } catch (error) {
       console.error("Error fetching user data:", error);
     }

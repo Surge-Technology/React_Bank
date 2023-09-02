@@ -45,6 +45,7 @@ const ActiveTaskList = ({ queryData }) => {
 
     const handleSubmit = async () => {
         const approver = actionApproverMap[selectedAction]; // Get the corresponding approver action
+        const selectedResponseId = selectedResponse.id; // Assuming you have an identifier for the selected response
 
         console.log("Selected Action:", selectedAction);
         console.log("Selected Approver Action:", approver);
@@ -57,9 +58,15 @@ const ActiveTaskList = ({ queryData }) => {
 
         console.log("dataaaa",processInstanceKey);
         try {
+
+            const requestData = {
+                approverAction: approver,
+                query: selectedAction === 'NeedClarification' ? query : '', // Include the query if it's NeedClarification
+                selectedResponseId: selectedResponseId // Include the identifier for the selected response
+              };
             const response = await axios.post(
                 `http://localhost:8080/completeTaskWithInstanceId/${processInstanceKey}`,
-                { approver: approver }
+                requestData
             );
 
             console.log("API Response:", response.data);
@@ -68,7 +75,7 @@ const ActiveTaskList = ({ queryData }) => {
 
             if (selectedAction === 'NeedClarification') {
                 history.push({
-                    pathname: '/AdminActiveTasklistDetail',
+                    pathname: '/ApproverForm',
                     state: {
                         selectedResponse: selectedResponse,
                         query: query
@@ -78,7 +85,7 @@ const ActiveTaskList = ({ queryData }) => {
             }
 
             history.push({
-                pathname: '/AdminActiveTasklistDetail',
+                pathname: '/ApproverForm',
                 state: {
                     selectedResponse: selectedResponse,
                     approverAction: approver

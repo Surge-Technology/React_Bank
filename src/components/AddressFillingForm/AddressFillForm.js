@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import { Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import './AddressFilingForm.css'; // Import custom CSS for styling
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 
 
 const AddressFillForm = (props) => {
@@ -12,34 +11,50 @@ const AddressFillForm = (props) => {
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [livedMoreThan3Years, setLivedMoreThan3Years] = useState(false);
   const [previousAddress, setPreviousAddress] = useState('');
-const {address} =addressData;
   const [responseMessage, setResponseMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      // Step 1: Get the processInstanceKey from sessionStorage or from the API
-      let processInstanceKey=sessionStorage.getItem("key");
+      setIsLoading(true);
+      let activeTaskId = sessionStorage.getItem("jobKey");
 
-    console.log("dataaaa",processInstanceKey);
-      if (!processInstanceKey) {
-        
-        throw new Error('Process instance key not found.');
+      console.log("activeTaskId", activeTaskId);
+      if (!activeTaskId) {
+
+        throw new Error('taskId not found.');
       }
+      addressData.activeTaskId = activeTaskId;
+
       const response = await axios.post(
-        `http://localhost:8080/completeTaskWithInstanceId/${processInstanceKey}`,
+        // `http://localhost:8080/completeTaskWithInstanceId/${processJobKey}`,
+        'http://localhost:8080/completeUserTask',
+
         addressData
       );
-alert("address is valid")
+      alert("address Form is submitted")
+      const jobKey = response.data.extractedInfo.jobKey;
+      const localTaskNames = response.data.extractedInfo.locTaskName;
+      alert(localTaskNames);
+
+      sessionStorage.setItem("jobKey", jobKey);
       setResponseMessage(response.data.message);
-    } 
+
+      props.history.push('/' + localTaskNames);
+      setIsLoading(false);
+    }
     catch (error) {
       console.error('Error while making the API request:', error);
       setErrorMessage('An error occurred while processing your request. Please try again later.');
+      setIsLoading(false);
     }
-    props.history.push("personalDetails");
+
 
   };
 
@@ -55,19 +70,24 @@ alert("address is valid")
     <div className='Addform'>
       <br />
       <br />
+      {isLoading && (
+        <div className="overlay">
+          <div className="loading-spinner"></div>
+        </div>
+      )}
       <div className='container'>
         <br />
         <h2>Enter Address Details</h2>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId='address'>
-            <Form.Label>Address</Form.Label>
+            <Form.Label>Address <span className='star'> *</span></Form.Label>
             <Form.Control
               type='text'
               placeholder='Enter Address'
               name='address'
               value={addressData.address}
               onChange={handleChange}
-              required
+            //required
             />
           </Form.Group>
 
@@ -91,7 +111,7 @@ alert("address is valid")
                 name='city'
                 value={addressData.city}
                 onChange={handleChange}
-                required
+              //required
               />
             </Form.Group>
 
@@ -103,7 +123,7 @@ alert("address is valid")
                 name='state'
                 value={addressData.state}
                 onChange={handleChange}
-                required
+              //required
               />
             </Form.Group>
           </Row>
@@ -117,9 +137,11 @@ alert("address is valid")
                 name='home'
                 value={addressData.home}
                 onChange={handleChange}
-                required
+              //required
               />
             </Form.Group>
+
+
 
             <Form.Group as={Col} controlId='phone'>
               <Form.Label>Phone Number</Form.Label>
@@ -129,56 +151,57 @@ alert("address is valid")
                 name='phone'
                 value={addressData.phone}
                 onChange={handleChange}
-                required
+              //required
               />
             </Form.Group>
           </Row>
-          <br/>
+          <br />
           <Row>
-          <Form.Group controlId='livedMoreThan3Years' className='d-flex align-items-center'>
-  <Form.Label className='mr-3'>   Have you lived at this address for more than 3 years?</Form.Label>
-  <br/>
-  <div className='ml-3'>
-    <Form.Check
-      inline
-      type='radio'
-      label='Yes'
-      name='livedMoreThan3Years'
-      value='yes'
-      checked={livedMoreThan3Years === 'yes'}
-      onChange={() => setLivedMoreThan3Years('yes')}
-    />
-    <Form.Check
-      inline
-      type='radio'
-      label='No'
-      name='livedMoreThan3Years'
-      value='no'
-      checked={livedMoreThan3Years === 'no'}
-      onChange={() => setLivedMoreThan3Years('no')}
-    />
-  </div>
-</Form.Group>
-</Row>
-{livedMoreThan3Years === 'yes' && (
-  <Form.Group controlId='previousAddress'>
-    <Form.Label>Previous Address</Form.Label>
-    <Form.Control
-      type='text'
-      placeholder='Enter Previous Address'
-      value={previousAddress}
-      onChange={(e) => setPreviousAddress(e.target.value)}
-    />
-  </Form.Group>
-)}
+            <Form.Group controlId='livedMoreThan3Years' className='d-flex align-items-center'>
+              <Form.Label className='mr-3'>   Have you lived at this address for more than 3 years?</Form.Label>
+              <br />
+              <div className='ml-3'>
+                <Form.Check
+                  inline
+                  type='radio'
+                  label='Yes'
+                  name='livedMoreThan3Years'
+                  value='yes'
+                  checked={livedMoreThan3Years === 'yes'}
+                  onChange={() => setLivedMoreThan3Years('yes')}
+                />
+                <Form.Check
+                  inline
+                  type='radio'
+                  label='No'
+                  name='livedMoreThan3Years'
+                  value='no'
+                  checked={livedMoreThan3Years === 'no'}
+                  onChange={() => setLivedMoreThan3Years('no')}
+                />
+              </div>
+            </Form.Group>
+          </Row>
+          {livedMoreThan3Years === 'yes' && (
+            <Form.Group controlId='previousAddress'>
+              <Form.Label>Previous Address</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter Previous Address'
+                value={previousAddress}
+                onChange={(e) => setPreviousAddress(e.target.value)}
+              />
+            </Form.Group>
+          )}
 
-          
+
           <Form.Group controlId='agreeToTerms'>
             <Form.Check
               type='checkbox'
               label='I agree that my above information is checked with the Issuer or Official Record Holder'
               checked={agreeToTerms}
               onChange={(e) => setAgreeToTerms(e.target.checked)}
+            //required
             />
           </Form.Group>
           {errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}

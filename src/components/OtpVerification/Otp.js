@@ -3,34 +3,47 @@ import './Otp.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from 'axios';
 import { toast } from "react-toastify";
+import { useHistory } from 'react-router-dom';
+//import Loader from 'react-loader-spinner'
+
 
 const Otp = (props) => {
   const [otpValue, setOTPValue] = useState('');
   const [isValidOTP, setIsValidOTP] = useState(null); // null means the validation is pending
+  const [isLoading, setIsLoading] = useState(false);
+
+  const history = useHistory();
 
   const handleVerifyOTP = () => {
-    axios.get(`http://localhost:8080/getOTP/${otpValue}`)
+    setIsLoading(true);
+    axios.get(`http://localhost:8080/enterOTP/${otpValue}`)
       .then((response) => {
-        // Assuming the backend API returns a JSON object with a "isValid" property
         const isValidOTP = response.data.OTP;
         if (isValidOTP) {
-          // If the OTP is valid, navigate to the next page
-          alert("IPIN is valid")
-          //globalToast("Verified IPIN.");
+          alert("IPIN is valid");
 
-          props.history.push("login");
+          // Get localTaskNames and jobKey from the response
+          const localTaskNames = response.data.extractedInfo.locTaskName;
+          console.log("localTaskNames", localTaskNames)
+          alert("localTaskNames--" + localTaskNames)
+          const jobKey = response.data.extractedInfo.jobKey;
+          sessionStorage.setItem("jobKey", jobKey);
+          console.log("Jobkey...", jobKey);
+          props.history.push('/' + localTaskNames);
+
         } else {
-          // If the OTP is not valid, show an error message and clear the entered OTP
           alert("Invalid IPIN. Please try again.");
           setOTPValue("");
         }
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching OTP data:', error);
         alert("Error verifying IPIN. Please try again later.");
+        setIsLoading(false);
       });
   };
-  
+
   function globalToast(message) {
 
     return toast.error(message);
@@ -39,7 +52,7 @@ const Otp = (props) => {
   const handleCancel = () => {
     // setOTPValue('');
     // setIsValidOTP(null);
-      props.history.push("/"); // Redirect to the home page
+    props.history.push("/"); // Redirect to the home page
 
   };
   return (
@@ -90,14 +103,27 @@ const Otp = (props) => {
                 <div className="col-6">
                   <button className="btn btn-outline-secondary w-100" onClick={handleCancel}>Cancel</button>
                 </div>
-                <div className="col-6">
+                {/* <div className="col-6">
                   <button className="btn btn-success w-100" onClick={handleVerifyOTP}>Verify</button>
+                </div> */}
+                <div className="col-6">
+                  <button className="btn btn-success w-100" onClick={handleVerifyOTP} disabled={isLoading}>
+                    {isLoading ? 'Verifying...' : 'Verify '}
+                  </button>
                 </div>
-              </div>    
+
+
+
+              </div>
             </div>
           </div>
         </div>
       </div>
+      {isLoading && (
+        <div className="overlay">
+          <div className="loading-spinner"></div>
+        </div>
+      )}
     </div>
   );
 };
