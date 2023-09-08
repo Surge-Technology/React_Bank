@@ -7,6 +7,7 @@ import axios from 'axios';
 const AddressFillForm = (props) => {
   const [addressData, setAddressData] = useState({
     address: '',
+    bpmnProcessId:'Address_Verification',
   });
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [livedMoreThan3Years, setLivedMoreThan3Years] = useState(false);
@@ -31,6 +32,7 @@ const AddressFillForm = (props) => {
         throw new Error('taskId not found.');
       }
       addressData.activeTaskId = activeTaskId;
+      
 
       const response = await axios.post(
         // `http://localhost:8080/completeTaskWithInstanceId/${processJobKey}`,
@@ -38,10 +40,11 @@ const AddressFillForm = (props) => {
 
         addressData
       );
+      console.log("addressData",addressData)
       alert("address Form is submitted")
       const jobKey = response.data.extractedInfo.jobKey;
-      const localTaskNames = response.data.extractedInfo.locTaskName;
-      alert(localTaskNames);
+      const localTaskNames = response.data.extractedInfo.localTaskName;
+      //alert(localTaskNames);
 
       sessionStorage.setItem("jobKey", jobKey);
       setResponseMessage(response.data.message);
@@ -87,7 +90,7 @@ const AddressFillForm = (props) => {
               name='address'
               value={addressData.address}
               onChange={handleChange}
-            //required
+            required
             />
           </Form.Group>
 
@@ -201,7 +204,7 @@ const AddressFillForm = (props) => {
               label='I agree that my above information is checked with the Issuer or Official Record Holder'
               checked={agreeToTerms}
               onChange={(e) => setAgreeToTerms(e.target.checked)}
-            //required
+            required
             />
           </Form.Group>
           {errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}

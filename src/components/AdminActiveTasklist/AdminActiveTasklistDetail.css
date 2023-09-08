@@ -12,6 +12,17 @@
   box-shadow: 5px 8px 7px rgb(0, 0, 0);
 }
 
+.page-content{
+  height: 50px;
+  font-size: 20px;
+}
+.table {
+  height:35vh;
+}
+.thead-dark{
+  height :80px;
+}
+
 .form-group row{
   font-weight: bold;
   font-size: 26px;
@@ -37,4 +48,8 @@
 }
 .btn-primary {
   box-shadow: 0 3px 2px rgb(12 218 144 / 20%);
+}
+
+.background-color{
+  background-color: #0CDA90;
 }

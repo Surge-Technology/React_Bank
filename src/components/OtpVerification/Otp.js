@@ -23,7 +23,7 @@ const Otp = (props) => {
           alert("IPIN is valid");
 
           // Get localTaskNames and jobKey from the response
-          const localTaskNames = response.data.extractedInfo.locTaskName;
+          const localTaskNames = response.data.extractedInfo.localTaskName;
           console.log("localTaskNames", localTaskNames)
           alert("localTaskNames--" + localTaskNames)
           const jobKey = response.data.extractedInfo.jobKey;
@@ -101,7 +101,7 @@ const Otp = (props) => {
               </div>
               <div className="row pt-5">
                 <div className="col-6">
-                  <button className="btn btn-outline-secondary w-100" onClick={handleCancel}>Cancel</button>
+                  <button className="btn btn-outline-success w-100" onClick={handleCancel}>Cancel</button>
                 </div>
                 {/* <div className="col-6">
                   <button className="btn btn-success w-100" onClick={handleVerifyOTP}>Verify</button>

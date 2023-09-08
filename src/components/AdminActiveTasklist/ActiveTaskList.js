@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import './ActivetaskList.css'
 import axios from 'axios';
 
-const ActiveTaskList = ({ queryData }) => {
+const ActiveTaskList = (props) => {
     const history = useHistory();
     const [responses, setResponses] = useState([]);
     const [selectedResponse, setSelectedResponse] = useState(null);
@@ -12,11 +12,50 @@ const ActiveTaskList = ({ queryData }) => {
     const [showQueryBox, setShowQueryBox] = useState(false);
     const [message, setMessage] = useState('');
 
+    const { userId } = useParams();
+    const [storedUserId, setStoredUserId] = useState('');
+
+
+
     useEffect(() => {
-        fetch('http://localhost:8080/getAllDetails')
+        const userIdFromStorage = sessionStorage.getItem('userId');
+
+        const fetchUrl = `http://localhost:8080/getConsolidateVariable/${userIdFromStorage}`;
+        fetch(fetchUrl)
             .then(response => response.json())
             .then(data => setResponses(data));
+
+
+        // Set the userId in the component's state
+        setStoredUserId(userIdFromStorage);
+
     }, []);
+
+    const handleActionChange = (event) => {
+        setSelectedAction(event.target.value);
+
+        // If the selected action is 'NeedClarification', set query field to be displayed
+        if (event.target.value === 'NeedClarification') {
+            setQuery('');
+        }
+    };
+
+    // const handleSubmit = () => {
+    // Perform any necessary actions based on the selectedAction
+    // if (selectedAction === 'Approve') {
+    //     // Navigate to Approverform with 'approved' flow condition
+    //     history.push(`/Approverform/${userId}/approved`);
+    // } else if (selectedAction === 'Reject') {
+    //     // Navigate to Approverform with 'rejected' flow condition
+    //     history.push(`/Approverform/${userId}/rejected`);
+    // } else if (selectedAction === 'NeedClarification') {
+    //     // Navigate to Approverform with 'needClarification' flow condition and pass the query as state
+    //     history.push({
+    //         pathname: `/Approverform/${userId}/needClarification`,
+    //         state: { query: query },
+    //     });
+    // }
+    // };
 
     const handleResponseSelect = (response) => {
         setSelectedResponse(response);
@@ -28,16 +67,16 @@ const ActiveTaskList = ({ queryData }) => {
         NeedClarification: 'needClarification'
     };
 
-    const handleActionChange = (event) => {
-        const action = event.target.value;
-        setSelectedAction(action);
+    // const handleActionChange = (event) => {
+    //     const action = event.target.value;
+    //     setSelectedAction(action);
 
-        if (action === 'NeedClarification') {
-            setShowQueryBox(true);
-        } else {
-            setShowQueryBox(false);
-        }
-    };
+    //     if (action === 'NeedClarification') {
+    //         setShowQueryBox(true);
+    //     } else {
+    //         setShowQueryBox(false);
+    //     }
+    // };
 
     const handleQueryChange = (event) => {
         setQuery(event.target.value);
@@ -45,7 +84,6 @@ const ActiveTaskList = ({ queryData }) => {
 
     const handleSubmit = async () => {
         const approver = actionApproverMap[selectedAction]; // Get the corresponding approver action
-        const selectedResponseId = selectedResponse.id; // Assuming you have an identifier for the selected response
 
         console.log("Selected Action:", selectedAction);
         console.log("Selected Approver Action:", approver);
@@ -54,430 +92,413 @@ const ActiveTaskList = ({ queryData }) => {
             setMessage('Invalid Action');
             return;
         }
-        let processInstanceKey=sessionStorage.getItem("key");
+        let processInstanceKey = sessionStorage.getItem("key");
 
-        console.log("dataaaa",processInstanceKey);
+        console.log("dataaaa", processInstanceKey);
         try {
 
             const requestData = {
-                approverAction: approver,
-                query: selectedAction === 'NeedClarification' ? query : '', // Include the query if it's NeedClarification
-                selectedResponseId: selectedResponseId // Include the identifier for the selected response
-              };
-            const response = await axios.post(
-                `http://localhost:8080/completeTaskWithInstanceId/${processInstanceKey}`,
-                requestData
-            );
-
-            console.log("API Response:", response.data);
-
-            setMessage(`${approver.charAt(0).toUpperCase() +approver.slice(1)}!`);
+                approver: approver
+            };
 
             if (selectedAction === 'NeedClarification') {
-                history.push({
-                    pathname: '/ApproverForm',
-                    state: {
-                        selectedResponse: selectedResponse,
-                        query: query
-                    }
-                });
-                return;
+                requestData.query = query; // Include the query in the request data
             }
+alert("1")
+            const response = await axios.post(
+                `http://localhost:8080/completeTaskWithInstanceId/${processInstanceKey}`, requestData
+                //{ approver: approver }
+            );
+alert("1.1")
+            console.log("API Response:", response.data);
+            alert("2")
 
-            history.push({
-                pathname: '/ApproverForm',
-                state: {
-                    selectedResponse: selectedResponse,
-                    approverAction: approver
-                }
-            });
+            setMessage(`${approver.charAt(0).toUpperCase() + approver.slice(1)}!`);
+
+            const stateData = {
+                selectedResponse: selectedResponse
+            };
+
+            if (selectedAction === 'NeedClarification') {
+                stateData.query = query;
+            } else {
+                stateData.approverAction = approver;
+            }
+            alert('checking')
+            history.push('/login');
+
+            // history.push(
+            //      '/ApproverForm',
+            //     // state: stateData
+            // );
         } catch (error) {
             console.error('Error while making the API request:', error);
             setMessage('An error occurred while processing your request. Please try again later.');
         }
+
     };
 
-    const handleClose = () => {
-        history.push('/');
+
+    const handleCancel = () => {
+        history.push('/ApproverForm');
     };
 
- 
+
 
     return (
 
         <div className="container">
+            <br />
+            
 
             <div className="w-100 auto shadow p-20">
 
-                <div className='card'>
+                <form>
+                    <div className='card'>
 
-                <h2 className="text-center mb-4">TaskList Details</h2>
+                        <h2 className="text-center mb-4">Applicant Details</h2>
 
-                <div className="row">
+                        <div className="row">
 
-                    <div className="col-md-12">
-
-                        <h3>Responses</h3>
-
-                        <ul className="list-group">
-
-                            {responses.map(task => (
-
-                                <li
-
-                                    key={task.id}
-
-                                    className={`list-group-item ${selectedResponse === task ? 'active' : ''}`}
-
-                                    onClick={() => handleResponseSelect(task)}
-
-                                >
-
-                                    {task.firstName} {task.lastName}
-
-                                </li>
-
-                            ))}
-
-                        </ul>
-
-                    </div>
-
-                </div>
-
- 
-
-                <br/><br/>
-
-                {selectedResponse && (
-
-                    <form>
-
-                        {/* <h3>Selected Response</h3> */}
-
-                        <div className="form-row">
-
-                            <div className="col-lg-5">
-
-                                {/* First Set of Fields */}
+                            <div className="col-md-12">
 
                                 <div className="form-group">
-
-                                    <label>First Name:</label>
-
+                                    <label>Id</label>
                                     <input
-
-                                        type="text"
-
-                                        className="form-control"
-
-                                        value={selectedResponse.firstName}
-
-                                        readOnly
-
-                                    />
-
-                                </div>
-
-                                <div className="form-group">
-
-                                    <label>Age</label>
-
-                                    <input
-
                                         type="number"
-
                                         className="form-control"
-
-                                        value={selectedResponse.age}
-
+                                        value={storedUserId}
                                         readOnly
-
                                     />
-
                                 </div>
-
                             </div>
 
- 
 
- 
 
- 
 
- 
+                            <div className="form-row">
 
-                            <div className="col-md-5">
+                                <div className="col-lg-5">
 
-                                {/* Second Set of Fields */}
 
-                                <div className="form-group">
+                                    <div className="form-group">
 
-                                    <label>Last Name:</label>
+                                        <label>First Name:</label>
 
-                                    <input
+                                        <input
 
-                                        type="text"
+                                            type="text"
 
-                                        className="form-control"
+                                            className="form-control"
 
-                                        value={selectedResponse.lastName}
+                                            value={responses.firstName}
 
-                                        readOnly
+                                            readOnly
 
-                                    />
+                                        />
+
+                                    </div>
+
+                                    <div className="form-group">
+
+                                        <label>Age</label>
+
+                                        <input
+
+                                            type="number"
+
+                                            className="form-control"
+
+                                            value={responses.age}
+
+                                            readOnly
+
+                                        />
+
+                                    </div>
+
+                                </div>
+
+
+
+
+
+
+
+
+
+                                <div className="col-md-5">
+
+                                    {/* Second Set of Fields */}
+
+                                    <div className="form-group">
+
+                                        <label>Last Name:</label>
+
+                                        <input
+
+                                            type="text"
+
+                                            className="form-control"
+
+                                            value={responses.lastName}
+
+                                            readOnly
+
+                                        />
+
+                                    </div>
+
+
+
+
+
+
+
+                                    <div className="form-group">
+
+                                        <label>Gender</label>
+
+                                        <input
+
+                                            type="text"
+
+                                            className="form-control"
+
+                                            value={responses.gender}
+
+                                            readOnly
+
+                                        />
+
+                                    </div>
 
                                 </div>
 
- 
 
- 
 
- 
+                                <div className="col-md-5">
 
-                                <div className="form-group">
+                                    <div className="form-group">
 
-                                    <label>Gender</label>
+                                        <label>Account Type</label>
 
-                                    <input
+                                        <input
 
-                                        type="text"
+                                            type="text"
 
-                                        className="form-control"
+                                            className="form-control"
 
-                                        value={selectedResponse.gender}
+                                            value={responses.accountType}
 
-                                        readOnly
+                                            readOnly
 
-                                    />
+                                        />
+
+                                    </div>
+
+                                    <div className="form-group">
+
+                                        <label>Credit Score</label>
+
+                                        <input
+
+                                            type="number"
+
+                                            className="form-control"
+
+                                            value={responses.creditScore}
+
+                                            readOnly
+
+                                        />
+
+                                    </div>
+
+                                    {/* ... (other fields in the second set) */}
 
                                 </div>
+
+
+
+
+
+                                <div className="col-md-5">
+
+                                    <div className="form-group">
+
+                                        <label>Annual Income</label>
+
+                                        <input
+
+                                            type="number"
+
+                                            className="form-control"
+
+                                            value={responses.annualIncome}
+
+                                            readOnly
+
+                                        />
+
+                                    </div>
+
+                                    <div className="form-group">
+
+                                        <label>Phone No</label>
+
+                                        <input
+
+                                            type="number"
+
+                                            className="form-control"
+
+                                            value={responses.phoneNo}
+
+                                            readOnly
+
+                                        />
+
+                                    </div>
+
+                                </div>
+
+
+
+
+
+                                {/* <div className="col-md-12">
+
+                                    <div className="form-group">
+                                        <label>Select Action:</label>
+                                        <select
+                                            className="form-control"
+                                            value={selectedAction}
+                                            onChange={handleActionChange}
+                                        >
+                                            <option value="">Select Action</option>
+                                            <option value="Approve">Approve</option>
+                                            <option value="Reject">Reject</option>
+                                            <option value="NeedClarification">Need Clarification</option>
+                                        </select>
+                                    </div>
+
+                                    {selectedAction === 'NeedClarification' && (
+                                        <div className="form-group">
+                                            <label>Enter Query:</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={query}
+                                                onChange={(e) => setQuery(e.target.value)}
+                                            />
+                                        </div>
+                                    )}
+                                    <div className="col-md-6">
+                                        <div className="form-group">
+                                            <label htmlFor="message">Comments</label>
+                                            <textarea className="form-control fixed-textarea" id="message" rows="4" onChange={handleQueryChange}></textarea>
+                                        </div>
+                                    </div>
+                                </div> */}
+                               
+
 
                             </div>
+                            <div className="col-md-12 selectAction">
+                                    <div className="form-group">
+                                        <label>Select Action:</label>
+                                        <select
+                                            className="form-control"
+                                            value={selectedAction}
+                                            onChange={handleActionChange}
+                                        >
+                                            <option value="">Select Action</option>
+                                            <option value="Approve">Approve</option>
+                                            <option value="Reject">Reject</option>
+                                            <option value="NeedClarification">Need Clarification</option>
+                                        </select>
+                                    </div>
 
- 
+                                    <div className="row">
+                                        {/* {selectedAction === 'NeedClarification' && ( */}
+                                             <div className="col-md-6">
 
-                            <div className="col-md-5">
+                                            <div className="form-group">
 
-                                <div className="form-group">
+                                                <label htmlFor="message">Enter Query:</label>
+                                               
+                                                    <input
+                                                      className="form-control fixed-textarea"
+                                                      id="message"
+                                                      rows="2"
+                                                      onChange={(e) => setQuery(e.target.value)}
+                                                      value={responses.query}
 
-                                    <label>Account Type</label>
+                                                    />
 
-                                    <input
+                                                </div>
+                                            </div>
 
-                                        type="text"
+                                        {/* )} */}
 
-                                        className="form-control"
 
-                                        value={selectedResponse.accountType}
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label htmlFor="message">Comments</label>
+                                                <textarea
+                                                    className="form-control fixed-textarea"
+                                                    id="message"
+                                                    rows="1"
+                                                    onChange={handleQueryChange}
+                                                    value={responses.comment}
 
-                                        readOnly
-
-                                    />
-
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div className="form-group">
-
-                                    <label>Credit Score</label>
-
-                                    <input
-
-                                        type="number"
-
-                                        className="form-control"
-
-                                        value={selectedResponse.creditScore}
-
-                                        readOnly
-
-                                    />
-
-                                </div>
-
-                                {/* ... (other fields in the second set) */}
-
-                            </div>
-
- 
-
- 
-
-                            <div className="col-md-5">
-
-                                <div className="form-group">
-
-                                    <label>Annual Income</label>
-
-                                    <input
-
-                                        type="number"
-
-                                        className="form-control"
-
-                                        value={selectedResponse.annualIncome}
-
-                                        readOnly
-
-                                    />
-
-                                </div>
-
-                                <div className="form-group">
-
-                                    <label>Phone No</label>
-
-                                    <input
-
-                                        type="number"
-
-                                        className="form-control"
-
-                                        value={selectedResponse.phoneNo}
-
-                                        readOnly
-
-                                    />
-
-                                </div>
-
-                            </div>
-
+                             
                         </div>
 
- 
 
-                            {/* <div className="col-md-12">
 
-                            <div className="form-group">
 
-                                <label >Address</label>
+                        {/* <div class="row justify-center"> */}
+                        <div className="text-center mt-4">
+  <button
+    className="btn btn-primary mr-4"
+    style={{ width: '150px' }}
 
-                                <input class="form-control" type="text" value={selectedResponse.address} readOnly />
+    onClick={handleSubmit}
+  >
+    Submit
+  </button>
+  <button
+    className="btn btn-danger"
+    style={{ width: '150px' }}
+
+    onClick={handleCancel}
+  >
+    Cancel
+  </button>
+</div>
+
 
                             </div>
-
-                            </div> */}
-
- 
-
-                        <div className="col-md-12">
-
-                        <div className="form-group">
-
-                            <label>Select Action:</label>
-
-                            <select
-
-                                className="form-control"
-
-                                value={selectedAction}
-
-                                onChange={handleActionChange}
-
-                            >
-
-                                <option value="">Select Action</option>
-
-                                <option value="Approve">Approve</option>
-
-                                <option value="Reject">Reject</option>
-
-                                <option value="NeedClarification">Need Clarification</option>
-
-                            </select>
-
-                        </div>
-
-                        </div>
-
-                        {showQueryBox && (
-
-                            <div className="form-group col-md-12">
-
-                                <label>Enter Query:</label>
-
-                                <textarea
-
-                                    className="form-control"
-
-                                    value={query}
-
-                                    onChange={handleQueryChange}
-
-                                />
-
-                            </div>
-
-                        )}
-
-                        <br/>
-
-                        <div className="text-center">
-
-                            {message && <div className="alert alert-info">{message}</div>}
-
-                            <button
-
-                                type="button"
-
-                                className="btn "
-
-                                onClick={handleSubmit}
-
-                                disabled={!selectedAction}
-
-                            >
-
-                                Submit
-
-                            </button>
-
-                        </div>
-
- 
-
-                        {/*
-
-                    <div>
-
-                        dropdown
-
-                    </div>
-
-                      <div class="form-group col-lg-12">
-
-                        <label class="font-weight-bold text-small" >Query</label>
-
-                        <textarea class="form-control"rows="5"  required=""></textarea>
-
-                      </div>
-
- 
-
-                      <div>
-
-                        <button className='btn btn-primary' >Submit</button>
-
-                      </div> */}
-
- 
-
-                    </form>
-
-                )}
-
-
-                </div>
+                    {/* </div> */}
+                    
+                </form>
 
             </div>
 
-        </div>
+        </div >
 
     );
 
 }
 
- 
+
 
 export default ActiveTaskList;

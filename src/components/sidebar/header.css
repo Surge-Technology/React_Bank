@@ -1,0 +1,15 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #333; /* Set your desired background color */
+    color: white; /* Set your desired text color */
+  }
+  
+  .left-corner {
+    text-align: right;
+  }
+  
+  
+  

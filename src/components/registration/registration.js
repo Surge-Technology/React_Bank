@@ -11,6 +11,7 @@ function Registration(props) {
     // lastName: "",
     // phoneNo: '',
     password: "",
+    
   });
 
   const [isOtpSent, setIsOtpSent] = useState(false);

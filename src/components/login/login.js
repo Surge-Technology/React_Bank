@@ -1,55 +1,15 @@
 import React, { useState } from "react";
-
-
-
 import { Link } from "react-router-dom";
-
-
-
-
-
-
-
 import Header from "../header/header";
-
-
-
 import axios from "axios"; // Import axios for making API requests
 
-
-
-
-
-
-
 const initialLoginState = {
-
-
-
   email: "",
-
-
-
   password: "",
-
-
-
   error: ""
-
-
-
 };
 
-
-
-
-
-
-
 export default function Login(props) {
-
-
-
   const [login, setLogin] = useState(initialLoginState);
 
 
@@ -124,22 +84,28 @@ export default function Login(props) {
 
         const response = await axios.post(`http://localhost:8080/login?email=${login.email}&password=${login.password}`);
 
+        const email = login.email;
+        sessionStorage.setItem('email', email);
 
+    // console.log("LoginResponse"+response.data)
 
-        console.log(response)
-
+        console.log("email",email)
         alert(response.data);
-
-
-
-
 
         if (response.data === "Login successful!") {
 
 
-          if (login.email === "admin@gmail.com") {
+          if (login.email === "kannan.nanthan@surgetechinc.in") {
             props.history.push("ApproverForm");
-          } else {
+          } 
+          else if(login.email === 'murali.muthu@surgetechinc.in'){
+            props.history.push("ApproverForm");
+          }
+          else if
+            (login.email === 'demo'){
+              props.history.push("ApproverForm");
+          }
+          else {
             props.history.push("AddressFillForm");
           }
         } else {

@@ -21,6 +21,7 @@ import CustomerQueryPage from "./components/CustomerQuery/CustomerQueryPage"
 import AdminActiveTasklistDetail from "./components/AdminActiveTasklist/ApproverForm"
 import CardDetails from "./components/CardDetails/CardDetails"
 import ActiveTaskList from "./components/AdminActiveTasklist/ActiveTaskList"
+import customerQuery from "./components/CustomerQuery/customerQuery";
 function App() {
   toast.configure({
     autoClose: 6000,
@@ -50,6 +51,7 @@ function App() {
         <Route path="/adminActiveTaskByID" component={AdminActiveTaskByID}/>
         <Route path="/cardDetails" component={CardDetails}/>
         <Route path="/ActiveTaskList" component={ActiveTaskList}/>
+        <Route path="/customerQuery" component={customerQuery}/>
 
 
         

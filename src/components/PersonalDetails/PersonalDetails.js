@@ -27,12 +27,14 @@ const PersonalDetails = (props) => {
     age: 0,
 
     annualIncome: 0,
-
+    // creditScore:0,
     accountType: "",
-    phoneNo: 0
+    phoneNo: 0,
+    bpmnProcessId:"Personal_Details"
   });
 
 
+ // const [firstName, setFirstName] = useState(""); // Initialize it with an empty string
 
   const {
 
@@ -50,7 +52,7 @@ const PersonalDetails = (props) => {
     accountType: selected,
     phoneNo,
 
-
+   creditScore,
 
   } = data;
 
@@ -80,10 +82,26 @@ const PersonalDetails = (props) => {
       data
 
     );
+  
+   console.log("resultFromApi" + JSON.stringify(result));
+   const firstName=sessionStorage.setItem('firstName', 'subi'); 
+   console.log(firstName)
+console.log("FirstName"+result.data.firstName)
+//alert("creditScore "+result.data.creditScore);
 
-const name=sessionStorage.setItem(firstName,"firstName")
- console.log(name);
-    console.log("resulttt" + JSON.stringify(result));
+   
+  //  if (result.data && result.data.firstName) {
+  //   // Set the firstName in session storage
+  //   const firstName = result.data.extractedInfo.firstName;
+  //   sessionStorage.setItem("firstName", firstName);
+  //   console.log("firstName", firstName); // Log the firstName
+
+  //   // Navigate to the success page and pass firstName as a query parameter
+  //   props.history.push(`/success?firstName=${firstName}`);
+  // } else {
+  //   console.log("firstName not found in result.data");
+  // }
+
 
     const localTaskNames = result.data.extractedInfo.locTaskName;
     const jobKey = result.data.extractedInfo.jobKey;
@@ -248,8 +266,7 @@ const name=sessionStorage.setItem(firstName,"firstName")
                 onChange={onInputChangeInt}
 
                 required
-                max={100}
-              ></input>
+                maxLength={3}              ></input>
 
             </div>
 
@@ -378,7 +395,7 @@ const name=sessionStorage.setItem(firstName,"firstName")
 
             <label htmlFor="annualIncome" className="col-sm-2 col-form-label">
 
-              <strong>annualIncome</strong>
+              <strong>annualIncome <span className="star" >*</span></strong>
 
             </label>
 

@@ -6,17 +6,24 @@
 .form-row {
     display: flex;
     flex-wrap: wrap;
-    margin-right: auto;
-    margin-left: 50px;
-    justify-content: space-evenly;
+    margin-right: 0px;
+    margin-left: 138px;
+    justify-content: space-between;
     align-items: center;
 }
-
+.form-row>[class*=col-] {
+    padding-right: 0px;
+    padding-left: -19px;
+}
 
   .col-md-12 {
     flex: 0 0 100%;
-    max-width: 85%;
-    margin-left: 11%;
+    max-width: 89%;
+    margin-left: 7%;
+    position: relative;
+   
+    
+
 }
 
 .btn {
@@ -30,4 +37,14 @@
     color: #fff;
     background-color: #84f376;
     border-color: #007bff;
+}
+.row justify-content-center{
+    justify-content: center;
+
+}
+.col-md-12 selectAction{
+    flex: 0 0 100%;
+    max-width: 89%;
+    margin-left: 7%;
+    position: relative;
 }

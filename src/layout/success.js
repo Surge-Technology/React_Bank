@@ -12,8 +12,7 @@ export default function CongratulationsScreen(props) {
 
   const requestbody = ({});
 
- const firstName=sessionStorage.getItem("firstName")
- alert(firstName);
+
 
   const handleModalClose = () => {
     alert("success");
@@ -135,12 +134,13 @@ export default function CongratulationsScreen(props) {
                         <h2>Account Details:</h2>
 
                         <ul>
+                        <li>Account Holder:Vijay </li>
+
 
                           <li>Account Number: [98765432109]</li>
 
                           <li>Account Type: [Saving Type]</li>
 
-                          <li>Account Holder:<span id="firstName"></span> </li>
 
                         </ul>
 
