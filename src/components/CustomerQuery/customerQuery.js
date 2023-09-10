@@ -1,5 +1,5 @@
 import React from 'react'
-// import './customerQuery.css'
+//import './customerQuery.css'
 const customerQuery = () => 
 {
 

@@ -16,7 +16,10 @@ const Otp = (props) => {
 
   const handleVerifyOTP = () => {
     setIsLoading(true);
-    axios.get(`http://localhost:8080/enterOTP/${otpValue}`)
+    let processInstanceKey = sessionStorage.getItem("key");
+
+    console.log("processInstanceKey", processInstanceKey); 
+    axios.get(`http://localhost:8080/enterOTP/${otpValue}/${processInstanceKey}`)
       .then((response) => {
         const isValidOTP = response.data.OTP;
         if (isValidOTP) {

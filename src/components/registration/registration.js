@@ -76,11 +76,11 @@ function Registration(props) {
     //   newErrors.lastName = "Last name is required";
     // }
 
-    if (!userDetails.email.trim()) {
-      newErrors.email = "Email address is required";
-    } else if (!/\S+@\S+\.\S+/.test(userDetails.email)) {
-      newErrors.email = "Invalid email address";
-    }
+    // if (!userDetails.email.trim()) {
+    //   newErrors.email = "Email address is required";
+    // } else if (!/\S+@\S+\.\S+/.test(userDetails.email)) {
+    //   newErrors.email = "Invalid email address";
+    // }
 
    
 

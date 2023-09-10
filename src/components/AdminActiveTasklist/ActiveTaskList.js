@@ -15,10 +15,10 @@ const ActiveTaskList = (props) => {
     const { userId } = useParams();
     const [storedUserId, setStoredUserId] = useState('');
 
+    const userIdFromStorage = sessionStorage.getItem('userId');
 
 
     useEffect(() => {
-        const userIdFromStorage = sessionStorage.getItem('userId');
 
         const fetchUrl = `http://localhost:8080/getConsolidateVariable/${userIdFromStorage}`;
         fetch(fetchUrl)
@@ -105,8 +105,10 @@ const ActiveTaskList = (props) => {
                 requestData.query = query; // Include the query in the request data
             }
 alert("1")
+console.log("userIdFromStorage",userIdFromStorage)
+alert(userIdFromStorage)
             const response = await axios.post(
-                `http://localhost:8080/completeTaskWithInstanceId/${processInstanceKey}`, requestData
+                `http://localhost:8080/completeTasklocal/${userIdFromStorage}`, requestData
                 //{ approver: approver }
             );
 alert("1.1")
@@ -125,7 +127,7 @@ alert("1.1")
                 stateData.approverAction = approver;
             }
             alert('checking')
-            history.push('/login');
+            history.push('/ApproverForm');
 
             // history.push(
             //      '/ApproverForm',

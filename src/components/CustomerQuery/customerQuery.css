@@ -1,12 +1,12 @@
-/* .rsvp-section {
-    background: url(img/bottom-form-bg.jpg);
+.rsvp-section {
+    background: url('../../assets/images/Query-Reply.jpg')
 }
 .headingbig {
     font-family: 'Big Shoulders Display', cursive;
 }
 .bg-black {
     background-color: rgba(000,000,000,0.5);
-    border: 4px double rgba(255,255,255,0.3);
+    /* border: 4px double rgba(255,255,255,0.3); */
 }
 label {
     font-weight: 600;
@@ -19,4 +19,4 @@ label {
 }
 .btn {
     border-radius: 0;
-} */
+}

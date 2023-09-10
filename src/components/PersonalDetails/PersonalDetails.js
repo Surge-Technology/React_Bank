@@ -73,12 +73,12 @@ const PersonalDetails = (props) => {
 
     data.activeTaskId = activeTaskId;
 
+    let processInstanceKey = sessionStorage.getItem("key");
 
+    console.log("processInstanceKey", processInstanceKey);
 
     const result = await Axios.post(
-
-
-      'http://localhost:8080/completeUserTask',
+      `http://localhost:8080/completeUserTask/${processInstanceKey}`,
       data
 
     );
@@ -103,7 +103,7 @@ console.log("FirstName"+result.data.firstName)
   // }
 
 
-    const localTaskNames = result.data.extractedInfo.locTaskName;
+    const localTaskNames = result.data.extractedInfo.localTaskName;
     const jobKey = result.data.extractedInfo.jobKey;
     sessionStorage.setItem("jobKey", jobKey);
     alert("localTaskNames", localTaskNames);
