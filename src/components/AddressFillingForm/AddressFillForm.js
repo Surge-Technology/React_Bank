@@ -43,14 +43,14 @@ const AddressFillForm = (props) => {
       );
       console.log("addressData",addressData)
       alert("address Form is submitted")
-      const jobKey = response.data.extractedInfo.jobKey;
-      const localTaskNames = response.data.extractedInfo.localTaskName;
-      alert(localTaskNames);
+      // const jobKey = response.data.extractedInfo.jobKey;
+      // const localTaskNames = response.data.extractedInfo.localTaskName;
+      // alert(localTaskNames);
 
-      sessionStorage.setItem("jobKey", jobKey);
-      setResponseMessage(response.data.message);
+      sessionStorage.setItem("jobKey", "123456");
+      setResponseMessage("response message");
 
-      props.history.push('/' + localTaskNames);
+      props.history.push('/personalDetails');
       setIsLoading(false);
     }
     catch (error) {

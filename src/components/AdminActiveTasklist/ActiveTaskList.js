@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import './ActivetaskList.css'
-import axios from 'axios';
+import Axios from 'axios';
 
 const ActiveTaskList = (props) => {
     const history = useHistory();
@@ -57,9 +57,9 @@ const ActiveTaskList = (props) => {
     // }
     // };
 
-    const handleResponseSelect = (response) => {
-        setSelectedResponse(response);
-    };
+    // const handleResponseSelect = (response) => {
+    //     setSelectedResponse(response);
+    // };
 
     const actionApproverMap = {
         Approve: 'approved',
@@ -67,34 +67,19 @@ const ActiveTaskList = (props) => {
         NeedClarification: 'needClarification'
     };
 
-    // const handleActionChange = (event) => {
-    //     const action = event.target.value;
-    //     setSelectedAction(action);
-
-    //     if (action === 'NeedClarification') {
-    //         setShowQueryBox(true);
-    //     } else {
-    //         setShowQueryBox(false);
-    //     }
-    // };
-
     const handleQueryChange = (event) => {
         setQuery(event.target.value);
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         const approver = actionApproverMap[selectedAction]; // Get the corresponding approver action
 
-        console.log("Selected Action:", selectedAction);
-        console.log("Selected Approver Action:", approver);
 
-        if (!approver) {
-            setMessage('Invalid Action');
-            return;
-        }
         let processInstanceKey = sessionStorage.getItem("key");
+        
 
-        console.log("dataaaa", processInstanceKey);
+       
         try {
 
             const requestData = {
@@ -104,35 +89,23 @@ const ActiveTaskList = (props) => {
             if (selectedAction === 'NeedClarification') {
                 requestData.query = query; // Include the query in the request data
             }
-alert("1")
-console.log("userIdFromStorage",userIdFromStorage)
-alert(userIdFromStorage)
-            const response = await axios.post(
-                `http://localhost:8080/completeTasklocal/${userIdFromStorage}`, requestData
-                //{ approver: approver }
-            );
-alert("1.1")
-            console.log("API Response:", response.data);
-            alert("2")
+
+
+const url = `http://localhost:8080/completeTasklocal/${userIdFromStorage}`
+
+         
+            const result = await Axios.post(
+                url,
+                requestData
+          
+              );
+                alert("Approver Query Submitted Successfully")
+            history.push("/ApproverForm");
+
+            
 
             setMessage(`${approver.charAt(0).toUpperCase() + approver.slice(1)}!`);
 
-            const stateData = {
-                selectedResponse: selectedResponse
-            };
-
-            if (selectedAction === 'NeedClarification') {
-                stateData.query = query;
-            } else {
-                stateData.approverAction = approver;
-            }
-            alert('checking')
-            history.push('/ApproverForm');
-
-            // history.push(
-            //      '/ApproverForm',
-            //     // state: stateData
-            // );
         } catch (error) {
             console.error('Error while making the API request:', error);
             setMessage('An error occurred while processing your request. Please try again later.');

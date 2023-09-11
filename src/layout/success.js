@@ -15,7 +15,7 @@ export default function CongratulationsScreen(props) {
 
 
   const handleModalClose = () => {
-    alert("success");
+  //  alert("success");
 
     let processInstanceKey = sessionStorage.getItem("key");
 
@@ -24,7 +24,7 @@ export default function CongratulationsScreen(props) {
     const result = Axios.post(`http://localhost:8080/completeTaskWithInstanceId/${processInstanceKey}`, requestbody)
 
     console.log(result)
-    alert(result+"......")
+    // alert(result+"......")
 
     setShowModal(false); // Close the modal when the "OK" button is clicked
     // props.history.push('Login')

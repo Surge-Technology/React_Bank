@@ -103,11 +103,41 @@ console.log("FirstName"+result.data.firstName)
   // }
 
 
-    const localTaskNames = result.data.extractedInfo.localTaskName;
-    const jobKey = result.data.extractedInfo.jobKey;
-    sessionStorage.setItem("jobKey", jobKey);
-    alert("localTaskNames", localTaskNames);
-    props.history.push('/' + localTaskNames);
+    // const localTaskNames = result.data.extractedInfo.localTaskName;
+    // const jobKey = result.data.extractedInfo.jobKey;
+    sessionStorage.setItem("jobKey", "2312321");
+  //  if(creditScore > 700){
+  //   props.history.push('/success');
+  //  }else if (creditScore < 500){
+  //   props.history.push('/registrationReject');
+  //  }else{
+  //   props.history.push('/Popup');
+  //  }
+  let baseScore = 300;
+
+  let ageFactor = 10;
+  let ageScore = age * ageFactor;
+  let incomeScore = annualIncome / 1000;
+  let creditScore = baseScore + ageScore + Math.floor(incomeScore);
+  // const creditScore = result.data.creditScore;
+  console.log("creditScore", creditScore);
+  if (creditScore > 700) {
+
+    history.push("/success");
+
+  } else if (creditScore >= 500 && creditScore <= 700) {
+
+    history.push("/Popup");
+
+  } else {
+
+    history.push("/registrationReject");
+
+  }
+
+  //props.history.push('happyPath')
+
+
 
 
 
@@ -122,10 +152,6 @@ console.log("FirstName"+result.data.firstName)
     setData({ ...data, [e.target.name]: parseInt(e.target.value) || 0 });
 
   };
-
-
-
-
 
   const onInputChange = (e) => {
 
@@ -249,24 +275,21 @@ console.log("FirstName"+result.data.firstName)
 
             <div className="col-sm-8">
 
-              <input
+            <input
+  type="text"
+  className="form-control"
+  id="age"
+  placeholder="Age"
+  name="age"
+  value={age}
+  onChange={(e) => {
+    // Use regular expression to allow only three-digit numbers
+    const inputAge = e.target.value.replace(/\D/g, '').slice(0, 3); // Remove non-digit characters and limit to 3 digits
+    onInputChangeInt({ target: { name: 'age', value: inputAge } }); // Call your existing onChange handler
+  }}
+  required
+/>
 
-                type="text"
-
-                className="form-control"
-
-                id="age"
-
-                placeholder="Age"
-
-                name="age"
-
-                value={age}
-
-                onChange={onInputChangeInt}
-
-                required
-                maxLength={3}              ></input>
 
             </div>
 

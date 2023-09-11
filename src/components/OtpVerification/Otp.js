@@ -26,13 +26,15 @@ const Otp = (props) => {
           alert("IPIN is valid");
 
           // Get localTaskNames and jobKey from the response
-          const localTaskNames = response.data.extractedInfo.localTaskName;
-          console.log("localTaskNames", localTaskNames)
-          alert("localTaskNames--" + localTaskNames)
-          const jobKey = response.data.extractedInfo.jobKey;
-          sessionStorage.setItem("jobKey", jobKey);
-          console.log("Jobkey...", jobKey);
-          props.history.push('/' + localTaskNames);
+          //const localTaskNames = response.data.extractedInfo.localTaskName;
+          //console.log("localTaskNames", localTaskNames)
+          //alert("localTaskNames--" + localTaskNames)
+          //const jobKey = response.data.extractedInfo.jobKey;
+          //sessionStorage.setItem("jobKey", jobKey);
+          sessionStorage.setItem("jobKey", "1234");
+          //console.log("Jobkey...", jobKey);
+          //props.history.push('/' + localTaskNames);
+          props.history.push('/addressFillForm');
 
         } else {
           alert("Invalid IPIN. Please try again.");

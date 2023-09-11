@@ -7,7 +7,7 @@ export default function RegistrationReject() {
  const requestbody = ({});
 
   const handleModalClose = () => {
-    alert("reject");
+   // alert("reject");
 
     let processInstanceKey = sessionStorage.getItem("key");
 
@@ -16,7 +16,6 @@ export default function RegistrationReject() {
     const result = Axios.post(`http://localhost:8080/completeTaskWithInstanceId/${processInstanceKey}`, requestbody)
 
     console.log(result)
-    alert(result+"......")
 
     setShowModal(false); // Close the modal when the "OK" button is clicked
     // props.history.push('Login')
@@ -70,7 +69,7 @@ export default function RegistrationReject() {
                       <tr>
                         <td className='para' bgcolor="#ffffff" align="left" style={{ padding: '30px 30px 40px 30px', color: '#141414', fontFamily: ' Calibri', fontSize: '20px', fontWeight: 400, lineHeight: '25px' }}>
                           <p style={{ margin: '0' }}> Mr.Pratip
-                        Mr.Balaji,  Your application did not meet our internal criteria for account eligibility. 
+                          Your application did not meet our internal criteria for account eligibility. 
 Please note that this decision has been made after a thorough analyses, and we are unable to proceed with opening the account at this time.we cannot more forward
 </p>
                         </td>
