@@ -15,7 +15,7 @@ const AdminActiveTasklistDetail = (props) => {
     try {
       const email=sessionStorage.getItem('email');
       console.log(" Login Email from sessionstorage ",email)
-      const response = await Axios.get(`http://localhost:8080/assignedTaskList?userName=${email}`);
+      const response = await Axios.get(`http://localhost:8080/assignedTaskList?userName=demo`);
      // alert("email User Name"+email);
       setUsers(response.data);
       console.log("resssss"+JSON.stringify(response.data));

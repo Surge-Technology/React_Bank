@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "../header/header";
-import axios from "axios"; // Import axios for making API requests
+import axios from "axios"; 
 
 const initialLoginState = {
   email: "",
@@ -30,24 +30,15 @@ export default function Login(props) {
 
         const email = login.email;
         sessionStorage.setItem('email', email);
-
-    // console.log("LoginResponse"+response.data)
-
         console.log("email",email)
-        alert(response.data);
+        // alert(response.data);
 
         if (response.data === "Login successful!") {
-
-
-          if (login.email === "demo") {
+          if (login.email === "Manager"|| login.email=== "Supervisior") {
             props.history.push("ApproverForm");
           } 
           else if(login.email === 'murali.muthu@surgetechinc.in'){
             props.history.push("ApproverForm");
-          }
-          else if
-            (login.email === 'demo'){
-              props.history.push("ApproverForm");
           }
           else {
             props.history.push("AddressFillForm");
@@ -62,6 +53,7 @@ export default function Login(props) {
     }
   }
   return (
+    <div className='background-img'>
     <div className="container-fluid back">
       <Header message="Login" />
       <div className="container" style={{ marginTop: "0%", width: "50%" }}>
@@ -81,7 +73,7 @@ export default function Login(props) {
                 <input
                   name="email"
                   className="form-control"
-                  placeholder="Email"
+                  placeholder="UserName"
                   type="email"
                   value={login.email}
                   onChange={onChangeLoginHandler}
@@ -131,5 +123,6 @@ export default function Login(props) {
           </div>
         )}
       </div>
+    </div>
     </div>
   );}

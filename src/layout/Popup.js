@@ -23,7 +23,7 @@ const Popup = (props) => {
 
        // alert("Submit Success!\nThank you")
 
-        props.history.push("login")
+        props.history.push("/")
 
     }
 

@@ -57,7 +57,7 @@ function Registration(props) {
           console.error("API Error:", error);
           globalToast("Failed to submit form. Please try again later.");
         });
-        alert("Submitted Successfully!!!!")
+        // alert("Submitted Successfully!!!!")
     } else {
       setShowNotification(true);
 

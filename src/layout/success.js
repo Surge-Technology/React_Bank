@@ -27,7 +27,7 @@ export default function CongratulationsScreen(props) {
     // alert(result+"......")
 
     setShowModal(false); // Close the modal when the "OK" button is clicked
-    // props.history.push('Login')
+     props.history.push('/')
 
   };
 

@@ -13,7 +13,7 @@ import Popup from "./layout/Popup";
 import RegistrationReject from "./layout/registrationReject";
 import Otp from "./components/OtpVerification/Otp";
 import AddFill from "./components/AddressFillingForm/AddFill";
-import AdminLogin from"./components/admin/adminlogin"
+//import AdminLogin from"./components/admin/adminlogin"
 import AdminActiveTaskByID from "./components/AdminActiveTasklist/AdminActiveTaskByID"
 // import Sidebar from "./components/admin/sidebar"
 import CustomerQueryPage from "./components/CustomerQuery/CustomerQueryPage"
@@ -22,6 +22,7 @@ import AdminActiveTasklistDetail from "./components/AdminActiveTasklist/Approver
 import CardDetails from "./components/CardDetails/CardDetails"
 import ActiveTaskList from "./components/AdminActiveTasklist/ActiveTaskList"
 import customerQuery from "./components/CustomerQuery/customerQuery";
+import AdminLogin from "./components/login/AdminLogin";
 function App() {
   toast.configure({
     autoClose: 6000,
@@ -42,7 +43,7 @@ function App() {
         <Route path="/Popup" component={Popup} />
         <Route path="/Otp" component={Otp} />
         <Route path="/AddFill" component={AddFill} />
-        <Route path="/adminlogin" component={AdminLogin} />
+        {/* <Route path="/adminlogin" component={AdminLogin} /> */}
         {/* <Route path="/AdminLogin" component={AdminLogin} /> */}
         {/* <Route path="/sidebar" component={Sidebar} /> */}
         <Route path="/CustomerQueryPage" component={CustomerQueryPage} />
@@ -52,6 +53,7 @@ function App() {
         <Route path="/cardDetails" component={CardDetails}/>
         <Route path="/ActiveTaskList" component={ActiveTaskList}/>
         <Route path="/customerQuery" component={customerQuery}/>
+        <Route path="/AdminLogin" component={AdminLogin}/>
 
 
         

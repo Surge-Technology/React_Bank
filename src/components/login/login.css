@@ -31,7 +31,14 @@
 
     background-size:cover;
 } */
-
+.background-img {
+  /* Replace 'your-image-url.jpg' with the URL or path to your background image */
+  background-image: url("../../assets/images/table-form.jpg");
+  background-size: cover; /* Adjust the size of the background image */
+  background-repeat: no-repeat;
+  background-position: center center; /* Center the background image */
+  /* You can also set other background properties as needed */
+}
 input {
   opacity: 0.8;
 }

@@ -6,15 +6,15 @@ function Header() {
 
   return (
     <div className="header">
-      <h1>Approver Form</h1>
-      <br/>
-      
-      <div className="left-corner">
-        <span>Welcome, {email}</span>
+    <img> </img>  <span><h1>Inbox</h1></span>  
+      <div className="right-corner"style={{ textAlign: 'end',fontSize:25 }}>
+         <span>Welcome {email}</span>
       </div>
       
       <br/>
-    </div>
+   </div>
+  
+
   );
 }
 

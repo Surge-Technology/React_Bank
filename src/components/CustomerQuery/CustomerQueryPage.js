@@ -63,13 +63,13 @@ const CustomerQueryPage = () => {
         postData,
         { headers: { 'Content-Type': 'application/json' } }
       );
-      alert("Document is submitted");
+      alert("Document submitted");
       console.log("API Response:", response);
       setSubmitted(true);
     } catch (error) {
       console.error('Error while submitting query:', error);
     }
- //   alert(" Your Document is submitted")
+ //   alert(" Your Document submitted")
   };
 
   const retrievedQueryData = sessionStorage.getItem('query');
@@ -95,7 +95,7 @@ const CustomerQueryPage = () => {
 
               {/* <h3 className="mb-4">Application Status : Inprogress<span style={{ margin: '0 10px' }}>   
             </span>  </h3>  */}
-              <p>Application Status:
+              <p><strong>Application Status:</strong>
                 <input
                   type="text"
                   className="form-control"
@@ -123,7 +123,8 @@ const CustomerQueryPage = () => {
             </div>
 
             <div className="col-md-6">
-              <p>Customer Name :
+              <p>
+                <strong>Customer Name :</strong>
 
                 <input
                   type="text"
@@ -139,7 +140,7 @@ const CustomerQueryPage = () => {
                 </p>
 
               <div className="col-md-6">
-                <form onSubmit={handleSubmit}>
+                <form >
 
                   <div className="form-group">
                     <label htmlFor="message">Comments</label>
@@ -152,16 +153,20 @@ const CustomerQueryPage = () => {
                     <label htmlFor="document">Upload Document <span className='star'> *</span></label>
                     <input type="file" className="form-control-file" id="document" required />
                   </div>
-                  <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
               </div>
-              {submitted && (
-                <div className="col-12 text-white p-5 bg-black">
-                  <p className="text-center">Form has already been submitted. Thank you!</p>
-                </div>
-              )}
+             
             </div>
           </div>
+        <center>  <button type="submit" className="btn btn-primary" style={{width:100}} onClick={handleSubmit}>Submit</button>
+</center>
+{submitted && (
+  <div className="col-12 text-white p-5 bg-black">
+    <p className="text-center">Form has already been submitted. Thank you!</p>
+  </div>
+)}
+
+
         </div>
       </div>
     </div>

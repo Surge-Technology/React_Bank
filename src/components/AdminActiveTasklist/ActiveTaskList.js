@@ -88,7 +88,14 @@ const ActiveTaskList = (props) => {
 
             if (selectedAction === 'NeedClarification') {
                 requestData.query = query; // Include the query in the request data
+                // alert("Approver Query Submitted Successfully")
+                alert("Query  send to  customer Email")
+
             }
+            else{
+                alert("Application Submitted")
+            }
+
 
 
 const url = `http://localhost:8080/completeTasklocal/${userIdFromStorage}`
@@ -99,7 +106,6 @@ const url = `http://localhost:8080/completeTasklocal/${userIdFromStorage}`
                 requestData
           
               );
-                alert("Approver Query Submitted Successfully")
             history.push("/ApproverForm");
 
             

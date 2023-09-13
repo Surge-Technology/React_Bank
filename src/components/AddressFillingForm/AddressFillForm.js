@@ -35,14 +35,14 @@ const AddressFillForm = (props) => {
       let processInstanceKey = sessionStorage.getItem("key");
 
       console.log("processInstanceKey", processInstanceKey);
-
+//alert("Address Form Submitted")
       const response = await axios.post(
         `http://localhost:8080/completeUserTask/${processInstanceKey}`,
 
         addressData
       );
       console.log("addressData",addressData)
-      alert("address Form is submitted")
+      alert("Address Validated successfully")
       // const jobKey = response.data.extractedInfo.jobKey;
       // const localTaskNames = response.data.extractedInfo.localTaskName;
       // alert(localTaskNames);
@@ -91,7 +91,8 @@ const AddressFillForm = (props) => {
               name='address'
               value={addressData.address}
               onChange={handleChange}
-            required
+              autoComplete="off" 
+              required
             />
           </Form.Group>
 
@@ -103,6 +104,8 @@ const AddressFillForm = (props) => {
               name='landmark'
               value={addressData.landmark}
               onChange={handleChange}
+              autoComplete="off" 
+
             />
           </Form.Group>
 
@@ -115,6 +118,8 @@ const AddressFillForm = (props) => {
                 name='city'
                 value={addressData.city}
                 onChange={handleChange}
+                autoComplete="off"
+
               //required
               />
             </Form.Group>
@@ -127,6 +132,7 @@ const AddressFillForm = (props) => {
                 name='state'
                 value={addressData.state}
                 onChange={handleChange}
+                autoComplete="off"
               //required
               />
             </Form.Group>
@@ -141,6 +147,7 @@ const AddressFillForm = (props) => {
                 name='home'
                 value={addressData.home}
                 onChange={handleChange}
+                autoComplete="off"
               //required
               />
             </Form.Group>
@@ -155,6 +162,8 @@ const AddressFillForm = (props) => {
                 name='phone'
                 value={addressData.phone}
                 onChange={handleChange}
+                  autoComplete="off" // Add this line to disable auto-suggestions
+
               //required
               />
             </Form.Group>

@@ -23,7 +23,7 @@ const Otp = (props) => {
       .then((response) => {
         const isValidOTP = response.data.OTP;
         if (isValidOTP) {
-          alert("IPIN is valid");
+          alert("Email verified successfully");
 
           // Get localTaskNames and jobKey from the response
           //const localTaskNames = response.data.extractedInfo.localTaskName;

@@ -21,7 +21,7 @@ const PersonalDetails = (props) => {
 
     lastName: "",
 
-    dob: 0,
+    dob: "",
     gender: "",
 
     age: 0,
@@ -321,7 +321,7 @@ console.log("FirstName"+result.data.firstName)
 
                 value={dob}
 
-                onChange={(e) => onInputChangeInt(e)}
+                onChange={(e) => onInputChange(e)}
 
               ></input>
 

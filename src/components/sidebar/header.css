@@ -7,8 +7,15 @@
     color: white; /* Set your desired text color */
   }
   
-  .left-corner {
-    text-align: right;
+  .right-corner {
+    display: flex;
+    justify-content: flex-end; /* This pushes the content to the right */
+    height: 100%; /* Optional: Ensure the container takes full height */
+    padding: 0 80px; /* Optional: Add some padding for spacing */
+  }
+  
+  .right-corner span {
+    font-weight: bold; 
   }
   
   

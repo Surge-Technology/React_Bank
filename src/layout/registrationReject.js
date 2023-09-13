@@ -1,7 +1,7 @@
 import React, {useState}from 'react'
 import sad from '../assets/images/sad.png'
 import Axios from 'axios';
-export default function RegistrationReject() {
+export default function RegistrationReject(props) {
   const [showModal, setShowModal] = useState(false); // State for showing/hiding the modal
 
  const requestbody = ({});
@@ -18,7 +18,7 @@ export default function RegistrationReject() {
     console.log(result)
 
     setShowModal(false); // Close the modal when the "OK" button is clicked
-    // props.history.push('Login')
+     props.history.push('/')
 
   };
   return (

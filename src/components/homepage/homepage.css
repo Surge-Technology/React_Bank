@@ -48,7 +48,8 @@ footer .column i + i {
 .back::after {
   content: "";
   position: fixed;
-  background-image: url("../../assets/images/body-bg.jpg");
+  /* background-image: url("../../assets/images/body-bg.jpg"); */
+  /* background-image: url("../../assets/images/girl-with-laptop-light.png"); */
   background-size: cover;
   opacity: 0.6;
   top: 0vh;
